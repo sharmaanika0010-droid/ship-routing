@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_7165f51a6a8a9cbdf0bf59f4eef7c4e2 {
+                #map_6755c8f983dbd561fd9f208d4fce3956 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -54,46 +54,36 @@
 <body>
     
     
-    <div style="
-        position: fixed; bottom: 30px; left: 30px; z-index: 1000;
-        background: white; padding: 18px 22px;
-        border-radius: 12px;
-        border-left: 5px solid #0057b8;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        font-family: Arial, sans-serif; font-size: 14px;
-        min-width: 200px;">
-        <div style="font-size:18px; font-weight:bold; margin-bottom:10px;">
-            🚢 Route Summary
-        </div>
-        <div>📍 <b>From:</b> Mumbai</div>
-        <div>🏁 <b>To:</b> Singapore</div>
-        <div>⏱️ <b>ETA:</b> 8d 5h</div>
-        <div>📍 <b>Waypoints:</b> 13</div>
-        <div style="margin-top:8px;">
-            🛡️ <b>Risk:</b>
-            <span style="
-                background:#28a745; color:white;
-                padding: 2px 10px; border-radius:10px;
-                font-weight:bold;">
-                Low (1.9/10)
-            </span>
-        </div>
+    <div style="position:fixed;bottom:30px;left:30px;z-index:1000;
+        background:white;padding:18px 22px;border-radius:12px;
+        border-left:5px solid #0057b8;
+        box-shadow:0 4px 15px rgba(0,0,0,0.18);
+        font-family:Arial,sans-serif;font-size:14px;min-width:210px;">
+      <div style="font-size:17px;font-weight:bold;margin-bottom:10px;">🚢 Route Summary</div>
+      <div>📍 <b>From:</b> Kolkata</div>
+      <div>🏁 <b>To:</b> Mombasa</div>
+      <div>⏱️ <b>ETA:</b> 37d 19h</div>
+      <div>📌 <b>Stops:</b> 13 waypoints</div>
+      <div style="margin-top:8px;">🛡️ <b>Risk:</b>
+        <span style="background:#dc3545;color:white;
+          padding:2px 10px;border-radius:10px;font-weight:bold;">
+          High (9.9/10)</span>
+      </div>
     </div>
     
-    
-            <div class="folium-map" id="map_7165f51a6a8a9cbdf0bf59f4eef7c4e2" ></div>
+            <div class="folium-map" id="map_6755c8f983dbd561fd9f208d4fce3956" ></div>
         
 </body>
 <script>
     
     
-            var map_7165f51a6a8a9cbdf0bf59f4eef7c4e2 = L.map(
-                "map_7165f51a6a8a9cbdf0bf59f4eef7c4e2",
+            var map_6755c8f983dbd561fd9f208d4fce3956 = L.map(
+                "map_6755c8f983dbd561fd9f208d4fce3956",
                 {
                     center: [10.0, 75.0],
                     crs: L.CRS.EPSG3857,
                     ...{
-  "zoom": 4,
+  "zoom": 3,
   "zoomControl": true,
   "preferCanvas": false,
 }
@@ -105,7 +95,7 @@
 
         
     
-            var tile_layer_e5ee43ab801fd37edfd949a8fd33b9f1 = L.tileLayer(
+            var tile_layer_ed441791aedc0209b217bf11e7846eab = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
                 {
   "minZoom": 0,
@@ -122,16 +112,16 @@
             );
         
     
-            tile_layer_e5ee43ab801fd37edfd949a8fd33b9f1.addTo(map_7165f51a6a8a9cbdf0bf59f4eef7c4e2);
+            tile_layer_ed441791aedc0209b217bf11e7846eab.addTo(map_6755c8f983dbd561fd9f208d4fce3956);
         
     
-            var poly_line_7013abe42341507d50eba1febeb22784 = L.polyline(
-                [[19.0, 74.0], [19.0, 71.0], [16.0, 74.0], [13.0, 77.0], [13.0, 80.0], [13.0, 83.0], [13.0, 86.0], [13.0, 89.0], [13.0, 92.0], [10.0, 95.0], [7.0, 98.0], [4.0, 101.0], [1.0, 104.0]],
+            var poly_line_145b61ffcbdc5cbd48e3ffef5f84b474 = L.polyline(
+                [[21.0, 89.0], [21.0, 85.0], [21.0, 81.0], [17.0, 77.0], [13.0, 73.0], [13.0, 69.0], [13.0, 65.0], [13.0, 61.0], [13.0, 57.0], [9.0, 53.0], [5.0, 49.0], [1.0, 45.0], [-3.0, 41.0]],
                 {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#0057b8", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 4}
-            ).addTo(map_7165f51a6a8a9cbdf0bf59f4eef7c4e2);
+            ).addTo(map_6755c8f983dbd561fd9f208d4fce3956);
         
     
-            poly_line_7013abe42341507d50eba1febeb22784.bindTooltip(
+            poly_line_145b61ffcbdc5cbd48e3ffef5f84b474.bindTooltip(
                 `<div>
                      Optimal Route
                  </div>`,
@@ -141,60 +131,83 @@
             );
         
     
-            var circle_marker_21c9c1702339b261fe3f9c22a07f7732 = L.circleMarker(
-                [13.0, 80.0],
-                {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_7165f51a6a8a9cbdf0bf59f4eef7c4e2);
+            var circle_marker_a02556aeb4841c111198bc2d4ff8c5ad = L.circleMarker(
+                [17.0, 77.0],
+                {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_6755c8f983dbd561fd9f208d4fce3956);
         
     
-        var popup_5d0914e7f3956d1e497096ef21cd5368 = L.popup({
+        var popup_b9609c36ab57a2340600c1cb158ea330 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_75010136b8f7dfa2924dbe9b50fd0693 = $(`<div id="html_75010136b8f7dfa2924dbe9b50fd0693" style="width: 100.0%; height: 100.0%;">Waypoint 4: 13.0°, 80.0°</div>`)[0];
-                popup_5d0914e7f3956d1e497096ef21cd5368.setContent(html_75010136b8f7dfa2924dbe9b50fd0693);
+                var html_c01bb8805a6250a286ab54d78ca39c10 = $(`<div id="html_c01bb8805a6250a286ab54d78ca39c10" style="width: 100.0%; height: 100.0%;">Waypoint 3: 17.0°, 77.0°</div>`)[0];
+                popup_b9609c36ab57a2340600c1cb158ea330.setContent(html_c01bb8805a6250a286ab54d78ca39c10);
             
         
 
-        circle_marker_21c9c1702339b261fe3f9c22a07f7732.bindPopup(popup_5d0914e7f3956d1e497096ef21cd5368)
+        circle_marker_a02556aeb4841c111198bc2d4ff8c5ad.bindPopup(popup_b9609c36ab57a2340600c1cb158ea330)
         ;
 
         
     
     
-            var circle_marker_39df4a654da43baf82279b56ae74321f = L.circleMarker(
-                [13.0, 92.0],
-                {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_7165f51a6a8a9cbdf0bf59f4eef7c4e2);
+            var circle_marker_ffc95bdc4998b7079e8c7ad4015b69c5 = L.circleMarker(
+                [13.0, 65.0],
+                {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_6755c8f983dbd561fd9f208d4fce3956);
         
     
-        var popup_425bf0cb3587c554d4e0a7f19712d2d6 = L.popup({
+        var popup_364996e60051d1db51536c9621c28a8e = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_c5a485a511476d935dee112d10cc0970 = $(`<div id="html_c5a485a511476d935dee112d10cc0970" style="width: 100.0%; height: 100.0%;">Waypoint 8: 13.0°, 92.0°</div>`)[0];
-                popup_425bf0cb3587c554d4e0a7f19712d2d6.setContent(html_c5a485a511476d935dee112d10cc0970);
+                var html_27bbd224b989f75f36a53d96be5bd2c9 = $(`<div id="html_27bbd224b989f75f36a53d96be5bd2c9" style="width: 100.0%; height: 100.0%;">Waypoint 6: 13.0°, 65.0°</div>`)[0];
+                popup_364996e60051d1db51536c9621c28a8e.setContent(html_27bbd224b989f75f36a53d96be5bd2c9);
             
         
 
-        circle_marker_39df4a654da43baf82279b56ae74321f.bindPopup(popup_425bf0cb3587c554d4e0a7f19712d2d6)
+        circle_marker_ffc95bdc4998b7079e8c7ad4015b69c5.bindPopup(popup_364996e60051d1db51536c9621c28a8e)
         ;
 
         
     
     
-            var marker_8b0b5010d76bd5b8c8137a93a3dde351 = L.marker(
-                [19.0, 74.0],
+            var circle_marker_88ede9df99270bcc53e2fe5a20a344c3 = L.circleMarker(
+                [9.0, 53.0],
+                {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_6755c8f983dbd561fd9f208d4fce3956);
+        
+    
+        var popup_454acc871d64e858c428fedf5c377848 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_90d04c01f4c3c9e0501df6eeecc578fd = $(`<div id="html_90d04c01f4c3c9e0501df6eeecc578fd" style="width: 100.0%; height: 100.0%;">Waypoint 9: 9.0°, 53.0°</div>`)[0];
+                popup_454acc871d64e858c428fedf5c377848.setContent(html_90d04c01f4c3c9e0501df6eeecc578fd);
+            
+        
+
+        circle_marker_88ede9df99270bcc53e2fe5a20a344c3.bindPopup(popup_454acc871d64e858c428fedf5c377848)
+        ;
+
+        
+    
+    
+            var marker_417da7fb684417baca66f780dbf61148 = L.marker(
+                [21.0, 89.0],
                 {
 }
-            ).addTo(map_7165f51a6a8a9cbdf0bf59f4eef7c4e2);
+            ).addTo(map_6755c8f983dbd561fd9f208d4fce3956);
         
     
-            var icon_53c509eb72fb46ccf1433a05bc6a4b8b = L.AwesomeMarkers.icon(
+            var icon_61ac89dc8df533517804d69fa2bd0abd = L.AwesomeMarkers.icon(
                 {
   "markerColor": "green",
   "iconColor": "white",
@@ -205,26 +218,26 @@
             );
         
     
-        var popup_264de9e6068f4aab49e6f6575e2b9813 = L.popup({
-  "maxWidth": 200,
+        var popup_79941b9b72ccc30bdf15f76973741e99 = L.popup({
+  "maxWidth": 180,
 });
 
         
             
-                var html_9d0d6f33fa6b2c10d758bdd0b7871a03 = $(`<div id="html_9d0d6f33fa6b2c10d758bdd0b7871a03" style="width: 100.0%; height: 100.0%;"><b>🚢 START</b><br>Mumbai</div>`)[0];
-                popup_264de9e6068f4aab49e6f6575e2b9813.setContent(html_9d0d6f33fa6b2c10d758bdd0b7871a03);
+                var html_e1fe647a8ed937318c3f299fc9711c04 = $(`<div id="html_e1fe647a8ed937318c3f299fc9711c04" style="width: 100.0%; height: 100.0%;"><b>🚢 Kolkata</b></div>`)[0];
+                popup_79941b9b72ccc30bdf15f76973741e99.setContent(html_e1fe647a8ed937318c3f299fc9711c04);
             
         
 
-        marker_8b0b5010d76bd5b8c8137a93a3dde351.bindPopup(popup_264de9e6068f4aab49e6f6575e2b9813)
+        marker_417da7fb684417baca66f780dbf61148.bindPopup(popup_79941b9b72ccc30bdf15f76973741e99)
         ;
 
         
     
     
-            marker_8b0b5010d76bd5b8c8137a93a3dde351.bindTooltip(
+            marker_417da7fb684417baca66f780dbf61148.bindTooltip(
                 `<div>
-                     Start: Mumbai
+                     START: Kolkata
                  </div>`,
                 {
   "sticky": true,
@@ -232,17 +245,17 @@
             );
         
     
-                marker_8b0b5010d76bd5b8c8137a93a3dde351.setIcon(icon_53c509eb72fb46ccf1433a05bc6a4b8b);
+                marker_417da7fb684417baca66f780dbf61148.setIcon(icon_61ac89dc8df533517804d69fa2bd0abd);
             
     
-            var marker_b9da61b674e30350f20753a6ee754c01 = L.marker(
-                [1.0, 104.0],
+            var marker_008ceb91f49cc5c4e3527b824088d3fe = L.marker(
+                [-3.0, 41.0],
                 {
 }
-            ).addTo(map_7165f51a6a8a9cbdf0bf59f4eef7c4e2);
+            ).addTo(map_6755c8f983dbd561fd9f208d4fce3956);
         
     
-            var icon_9873e5cb438fdcad7a96ab9f23286302 = L.AwesomeMarkers.icon(
+            var icon_2dd5718bdfda6ccc905cc453f703b816 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "red",
   "iconColor": "white",
@@ -253,26 +266,26 @@
             );
         
     
-        var popup_47395493689666cac8b9fbe6742eb477 = L.popup({
-  "maxWidth": 200,
+        var popup_a269322d1ba5867d967893047ef80a98 = L.popup({
+  "maxWidth": 180,
 });
 
         
             
-                var html_9abc6c80e33f07dd5afed700be709b02 = $(`<div id="html_9abc6c80e33f07dd5afed700be709b02" style="width: 100.0%; height: 100.0%;"><b>🏁 DESTINATION</b><br>Singapore<br>ETA: <b>197.7 hrs</b><br>Risk: <b>1.9/10</b></div>`)[0];
-                popup_47395493689666cac8b9fbe6742eb477.setContent(html_9abc6c80e33f07dd5afed700be709b02);
+                var html_c2b53e0d6936cc8a2dbd3061bc3ff562 = $(`<div id="html_c2b53e0d6936cc8a2dbd3061bc3ff562" style="width: 100.0%; height: 100.0%;"><b>🏁 Mombasa</b><br>ETA: <b>907.4 hrs</b><br>Risk: <b>9.9/10</b></div>`)[0];
+                popup_a269322d1ba5867d967893047ef80a98.setContent(html_c2b53e0d6936cc8a2dbd3061bc3ff562);
             
         
 
-        marker_b9da61b674e30350f20753a6ee754c01.bindPopup(popup_47395493689666cac8b9fbe6742eb477)
+        marker_008ceb91f49cc5c4e3527b824088d3fe.bindPopup(popup_a269322d1ba5867d967893047ef80a98)
         ;
 
         
     
     
-            marker_b9da61b674e30350f20753a6ee754c01.bindTooltip(
+            marker_008ceb91f49cc5c4e3527b824088d3fe.bindTooltip(
                 `<div>
-                     End: Singapore
+                     END: Mombasa
                  </div>`,
                 {
   "sticky": true,
@@ -280,7 +293,7 @@
             );
         
     
-                marker_b9da61b674e30350f20753a6ee754c01.setIcon(icon_9873e5cb438fdcad7a96ab9f23286302);
+                marker_008ceb91f49cc5c4e3527b824088d3fe.setIcon(icon_2dd5718bdfda6ccc905cc453f703b816);
             
 </script>
 </html>

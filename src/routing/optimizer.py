@@ -13,9 +13,9 @@ def haversine(lat1, lon1, lat2, lon2):
 
 
 class RouteOptimizer:
-    LAT_MIN, LAT_MAX = -35, 28
-    LON_MIN, LON_MAX =  32, 108
-    GRID_STEP = 3
+    LAT_MIN, LAT_MAX = -35, 30
+    LON_MIN, LON_MAX =  25, 120
+    GRID_STEP = 4
 
     def __init__(self, start, end, ship, weather_client, mode="time"):
         self.start   = start

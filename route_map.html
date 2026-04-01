@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_94c535017bbd670df67a80f1a4de6137 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+    <div style="
+        position: fixed; bottom: 30px; left: 30px; z-index: 1000;
+        background: white; padding: 18px 22px;
+        border-radius: 12px;
+        border-left: 5px solid #0057b8;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        font-family: Arial, sans-serif; font-size: 14px;
+        min-width: 200px;">
+        <div style="font-size:18px; font-weight:bold; margin-bottom:10px;">
+            🚢 Route Summary
+        </div>
+        <div>📍 <b>From:</b> Mumbai</div>
+        <div>🏁 <b>To:</b> Singapore</div>
+        <div>⏱️ <b>ETA:</b> 10d 11h</div>
+        <div>📍 <b>Waypoints:</b> 7</div>
+        <div style="margin-top:8px;">
+            🛡️ <b>Risk:</b>
+            <span style="
+                background:#28a745; color:white;
+                padding: 2px 10px; border-radius:10px;
+                font-weight:bold;">
+                Low (1.1/10)
+            </span>
+        </div>
+    </div>
+    
+    
+            <div class="folium-map" id="map_94c535017bbd670df67a80f1a4de6137" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_94c535017bbd670df67a80f1a4de6137 = L.map(
+                "map_94c535017bbd670df67a80f1a4de6137",
+                {
+                    center: [10.0, 75.0],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 4,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_f3eb91117d3266434ef4fb058a3a1044 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_f3eb91117d3266434ef4fb058a3a1044.addTo(map_94c535017bbd670df67a80f1a4de6137);
+        
+    
+            var poly_line_a760f33d86b18d47af3c2e3388689068 = L.polyline(
+                [[21.0, 72.0], [13.0, 64.0], [5.0, 72.0], [5.0, 80.0], [5.0, 88.0], [5.0, 96.0], [5.0, 104.0]],
+                {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#0057b8", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_94c535017bbd670df67a80f1a4de6137);
+        
+    
+            poly_line_a760f33d86b18d47af3c2e3388689068.bindTooltip(
+                `<div>
+                     Optimal Route
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a07d9df31956f9a379d87a4ad89ee72e = L.circleMarker(
+                [5.0, 88.0],
+                {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_94c535017bbd670df67a80f1a4de6137);
+        
+    
+        var popup_e6fdd4b94b953744e6068da74b29d02b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c6399ae44d3511736ee4a99a494959a3 = $(`<div id="html_c6399ae44d3511736ee4a99a494959a3" style="width: 100.0%; height: 100.0%;">Waypoint 4: 5.0°, 88.0°</div>`)[0];
+                popup_e6fdd4b94b953744e6068da74b29d02b.setContent(html_c6399ae44d3511736ee4a99a494959a3);
+            
+        
+
+        circle_marker_a07d9df31956f9a379d87a4ad89ee72e.bindPopup(popup_e6fdd4b94b953744e6068da74b29d02b)
+        ;
+
+        
+    
+    
+            var marker_9dcf57c1ab4a2eb4cc506e68af8359a3 = L.marker(
+                [21.0, 72.0],
+                {
+}
+            ).addTo(map_94c535017bbd670df67a80f1a4de6137);
+        
+    
+            var icon_0ffe6dcd32c97756ba41be69a4083079 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "ship",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1d3c8b48cc34fd7b7b0b5bb670710a69 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_78877a49544c4b8349fdc467bc8e1cb4 = $(`<div id="html_78877a49544c4b8349fdc467bc8e1cb4" style="width: 100.0%; height: 100.0%;"><b>🚢 START</b><br>Mumbai</div>`)[0];
+                popup_1d3c8b48cc34fd7b7b0b5bb670710a69.setContent(html_78877a49544c4b8349fdc467bc8e1cb4);
+            
+        
+
+        marker_9dcf57c1ab4a2eb4cc506e68af8359a3.bindPopup(popup_1d3c8b48cc34fd7b7b0b5bb670710a69)
+        ;
+
+        
+    
+    
+            marker_9dcf57c1ab4a2eb4cc506e68af8359a3.bindTooltip(
+                `<div>
+                     Start: Mumbai
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_9dcf57c1ab4a2eb4cc506e68af8359a3.setIcon(icon_0ffe6dcd32c97756ba41be69a4083079);
+            
+    
+            var marker_15ac344a38672c630ad293f3544a8225 = L.marker(
+                [5.0, 104.0],
+                {
+}
+            ).addTo(map_94c535017bbd670df67a80f1a4de6137);
+        
+    
+            var icon_63505c4e2f92767e749c2b201bae3df6 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "flag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_8e4d464dbfffddd723c09e4c49b362f1 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_8a8752e2720769bd2d62e32a366a4e75 = $(`<div id="html_8a8752e2720769bd2d62e32a366a4e75" style="width: 100.0%; height: 100.0%;"><b>🏁 DESTINATION</b><br>Singapore<br>ETA: <b>251.0 hrs</b><br>Risk: <b>1.1/10</b></div>`)[0];
+                popup_8e4d464dbfffddd723c09e4c49b362f1.setContent(html_8a8752e2720769bd2d62e32a366a4e75);
+            
+        
+
+        marker_15ac344a38672c630ad293f3544a8225.bindPopup(popup_8e4d464dbfffddd723c09e4c49b362f1)
+        ;
+
+        
+    
+    
+            marker_15ac344a38672c630ad293f3544a8225.bindTooltip(
+                `<div>
+                     End: Singapore
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_15ac344a38672c630ad293f3544a8225.setIcon(icon_63505c4e2f92767e749c2b201bae3df6);
+            
+</script>
+</html>

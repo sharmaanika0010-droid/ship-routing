@@ -1,4 +1,4 @@
-# 🚢 Optimal Ship Routing Algorithm — Indian Ocean
+# Optimal Ship Routing Algorithm — Indian Ocean
 
 A Multi-Objective Particle Swarm Optimization (MOPSO) based ship routing system  
 developed for the Indian Ocean region. Optimizes voyage for **time**, **safety**, and **fuel efficiency** simultaneously.

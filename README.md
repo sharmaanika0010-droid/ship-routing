@@ -1,150 +1,153 @@
-# 🚢 Optimal Ship Routing Algorithm — Indian Ocean
+# Optimal Ship Routing — Indian Ocean
 
-> A Multi-Objective Particle Swarm Optimization (MOPSO) based ship routing system  
-> developed for the Indian Ocean region. Optimizes voyage for **time**, **safety**, and **fuel efficiency** simultaneously.
-
----
-
-## 📌 Project Overview
-
-Most goods worldwide are transported by ships which rely heavily on fossil fuels.  
-This project builds an intelligent routing algorithm that suggests the **optimal route** between any two ports in the Indian Ocean based on:
-
-- 🕐 **Minimum travel time**
-- ⛈️ **Maximum weather safety** (avoids storms, high waves, strong winds)
-- ⛽ **Minimum fuel consumption**
-
-The algorithm returns a **Pareto front** — a set of best possible trade-off routes — so the ship captain or company can choose based on their priority.
+> Graph-based ship routing system for the Indian Ocean region.  
+> Optimizes voyage for **minimum time** and **maximum safety** using Dijkstra's algorithm.
 
 ---
 
-## 🗂️ Project Structure
+## Project Overview
+
+This project builds an intelligent routing system that finds the optimal route 
+between any two ports in the Indian Ocean based on:
+
+- **Minimum travel time** — fastest route considering ship speed and weather
+- **Maximum weather safety** — avoids high waves and strong winds  
+- **Ship-aware routing** — different results for cargo, tanker, container ships
+
+---
+
+## Project Structure
 ship-routing/
 │
 ├── src/
-│   ├── mopso_router.py       # Core MOPSO optimization engine
-│   ├── objectives.py         # Objective functions (time, safety, fuel) + weather model
-│   ├── constraints.py        # Land avoidance + depth constraints
-│   └── visualise.py          # Map plots, Pareto front charts, GeoJSON export
+│   ├── routing/
+│   │   ├── optimizer.py      # Core routing engine (Dijkstra's algorithm)
+│   │   └── map_display.py    # Interactive HTML map generation (Folium)
+│   ├── ships/
+│   │   └── ship.py           # Ship types and speed model
+│   ├── weather/
+│   │   └── weather.py        # Weather data module
+│   └── main.py               # Entry point
 │
-├── tests/                    # Unit tests
+├── tests/
+│   ├── test_routing.py       # 18 unit tests — all passing
+│   └── test_optimizer.py     # Optimizer tests
 │
-├── main.py                   # ▶️ Entry point — run this to get optimal routes
-├── requirements.txt          # Python dependencies
-├── route_map.html            # Interactive HTML map of results
-└── README.md                 # This file
+├── docs/                     # SRS document and project reports
+├── diagrams/                 # Architecture diagrams
+├── notebooks/                # Demo notebooks
+├── route_map.html            # Interactive output map
+├── requirements.txt          # Dependencies
+└── README.md
 ---
 
-## ⚙️ Algorithm — How It Works
+## Algorithm — How It Works
 
-We use **MOPSO (Multi-Objective Particle Swarm Optimization)**:
+The system uses **Dijkstra's shortest path algorithm** on a geographic ocean grid:
 
-1. A "swarm" of particles (candidate routes) is initialized between origin and destination
-2. Each particle is evaluated on 3 objectives: travel time, safety, fuel
-3. Non-dominated solutions are stored in a **Pareto archive**
-4. Particles move toward better solutions guided by personal best + global best
-5. After 200 iterations, the archive contains the best possible routes
-
-**Why MOPSO?**
-| Method | Multi-objective | Speed | Versatile |
-|--------|----------------|-------|-----------|
-| Dijkstra / A* | ❌ Single only | ✅ Fast | ❌ |
-| Genetic Algorithm | ✅ | 🔶 Slow | ✅ |
-| Isochrone | ❌ | ✅ Fast | ❌ |
-| **MOPSO (ours)** | ✅ | ✅ Fast | ✅ |
+1. Indian Ocean is divided into a grid of nodes (lat/lon points)
+2. Nodes are connected by edges — land nodes are removed
+3. Each edge weight is calculated based on:
+   - **Time mode:** travel time = distance ÷ effective ship speed
+   - **Safety mode:** penalty for high waves (>4.5m) and strong winds
+4. Dijkstra finds the minimum-weight path from origin to destination
+5. Result is displayed on an interactive Folium map
 
 ---
 
-## 🌊 Weather Model
+## Weather Model
 
-The system uses a **WeatherGrid** that models:
+The `WeatherData` class provides weather conditions at any ocean point:
 - Significant wave height (metres)
 - Wind speed (m/s)
-- Surface ocean currents (speed + direction)
-- Storm cells (Arabian Sea cyclone simulation)
 
-> **For real deployment:** Replace synthetic grid with ERA5 (ECMWF) or CMEMS data via `WeatherGrid.from_netcdf("your_file.nc")`
-
+Ship speed is reduced automatically based on weather using the drift coefficient formula:
+effective_speed = max(speed - drift_coeff × (wind×0.1 + wave×0.2), speed×0.3)
 ---
 
-## 🚀 How to Run
+## How to Run
 
 ### 1. Clone the repository
+```bash
 git clone https://github.com/sharmaanika0010-droid/ship-routing.git
 cd ship-routing
+```
+
 ### 2. Install dependencies
+```bash
 pip install -r requirements.txt
-### 3. Run the optimizer
-python main.py
-### 4. Output files generated
-| File | Description |
-|------|-------------|
-| `routes_map.png` | All Pareto routes plotted on Indian Ocean map |
-| `pareto_front.png` | Trade-off scatter plots (time vs safety vs fuel) |
-| `optimal_routes.geojson` | All routes in GeoJSON (open in QGIS / Google Earth) |
-| `route_report.txt` | Top 5 recommended routes with stats |
+```
+
+### 3. Run the system
+```bash
+python src/main.py
+```
+
+### 4. Select options when prompted
+Enter Start Port: Mumbai
+Enter End Port: Mombasa
+Enter Ship type: cargo
+Enter Mode: time
+### 5. Open the map
+Double-click `route_map.html` in the ship-routing folder to see the route on an interactive map.
 
 ---
 
-## 🗺️ Sample Result (Mumbai → Mombasa)
+## Available Ports
 
-| Rank | Travel Time | Safety Penalty | Fuel (tonnes) |
-|------|-------------|----------------|---------------|
-| #1 ✅ | 208 hours (8.7 days) | 0.0000 (safest) | 253 tonnes |
-| #2 | 213 hours (8.9 days) | 105.56 | 243 tonnes |
-| #3 | 210 hours (8.8 days) | 1.95 | 250 tonnes |
-
-> Route #1 is the **balanced recommended route** — safest with reasonable time and fuel.
+| Port | Country | Coordinates |
+|------|---------|-------------|
+| Mumbai | India | 18.9°N, 72.8°E |
+| Chennai | India | 13.0°N, 80.2°E |
+| Kolkata | India | 22.5°N, 88.3°E |
+| Colombo | Sri Lanka | 6.9°N, 79.8°E |
+| Singapore | Singapore | 1.3°N, 103.8°E |
+| Dubai | UAE | 25.2°N, 55.2°E |
+| Mombasa | Kenya | -4.0°N, 39.6°E |
+| Perth | Australia | -31.9°N, 115.8°E |
+| Durban | South Africa | -29.8°N, 31.0°E |
+| Chittagong | Bangladesh | 22.3°N, 91.8°E |
 
 ---
 
-## 🛳️ Customize for Any Ship
+## Ship Types
 
-Edit `ShipParams` in `main.py`:
-ship = ShipParams(
-name="Your Ship Name",
-max_speed_kn=15.0,
-service_speed_kn=12.0,
-fuel_rate_t_per_day=28.0,
-beam_m=32.0,
-draft_m=10.5,
-max_wave_height_m=5.0,
-max_wind_speed_ms=18.0,
-)
+| Type | Speed | Drift Coefficient |
+|------|-------|------------------|
+| Cargo Vessel | 14 knots | 0.8 |
+| Oil Tanker | 12 knots | 1.0 |
+| Container Ship | 18 knots | 0.6 |
+
 ---
 
-## 🔢 Change Origin / Destination
-run_optimisation(
-origin=(19.0, 72.8),        # Mumbai, India
-destination=(-4.0, 39.7),   # Mombasa, Kenya
-)
+## Tests
+
+**18 unit tests — all passing**
+
+```bash
+python -m pytest tests/test_routing.py -v
+```
+
+Tests cover: distance calculation, ship speed model, weather module, ocean/land detection, optimizer modes.
+
 ---
 
-## 📦 Dependencies
-numpy
-scipy
-matplotlib
+## Dependencies
+numpy, scipy, networkx, folium, requests, flask, pandas, pytest
+
 ---
 
-## 🗓️ Future Scope
+## Future Scope
 
+- [ ] Multi-objective optimization (MOPSO) for simultaneous time + safety + fuel optimization
 - [ ] Real-time ERA5 / CMEMS weather data integration
-- [ ] High-resolution coastline (Natural Earth 10m shapefile)
-- [ ] Bathymetry constraint via GEBCO 2023
-- [ ] FastAPI web service + Leaflet.js interactive map
+- [ ] FastAPI web service
 - [ ] CO₂ emission reporting (IMO 2030 compliance)
-- [ ] AIS historical voyage backtesting
 
 ---
 
-## 👤 Author
+## Author
 
 **sharmaanika0010-droid**  
-B.Tech Project — Indian Ocean Ship Routing  
-Built with Python 🐍 | Open Source
-
----
-
-## 📄 License
-
-This project is open source and available for academic and research use.
+B.Tech Minor Project — AI with IBM  
+Built with Python | Open Source

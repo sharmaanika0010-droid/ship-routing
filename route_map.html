@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_e11101502a49d2137476e4fd380574ba {
+                #map_e35c993f7fb565f16b321e5e9b6384cc {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -60,25 +60,180 @@
         box-shadow:0 4px 15px rgba(0,0,0,0.18);
         font-family:Arial,sans-serif;font-size:14px;min-width:210px;">
       <div style="font-size:17px;font-weight:bold;margin-bottom:10px;">🚢 Route Summary</div>
-      <div>📍 <b>From:</b> Perth</div>
-      <div>🏁 <b>To:</b> Mombasa</div>
-      <div>⏱️ <b>ETA:</b> 15d 9h</div>
-      <div>📌 <b>Stops:</b> 20 waypoints</div>
+      <div>📍 <b>From:</b> Dubai</div>
+      <div>🏁 <b>To:</b> Perth</div>
+      <div>⏱️ <b>ETA:</b> 15d 15h</div>
+      <div>📌 <b>Stops:</b> 16 waypoints</div>
       <div style="margin-top:8px;">🛡️ <b>Risk:</b>
         <span style="background:#28a745;color:white;
           padding:2px 10px;border-radius:10px;font-weight:bold;">
-          Low (3.0/10)</span>
+          Low (2.4/10)</span>
       </div>
     </div>
     
-            <div class="folium-map" id="map_e11101502a49d2137476e4fd380574ba" ></div>
+    <div style="position:fixed;bottom:30px;right:30px;z-index:1000;
+        background:white;padding:14px 18px;border-radius:12px;
+        border-left:5px solid #28a745;
+        box-shadow:0 4px 15px rgba(0,0,0,0.18);
+        font-family:Arial,sans-serif;font-size:13px;min-width:180px;">
+      <div style="font-size:15px;font-weight:bold;margin-bottom:10px;">
+        🎬 Ship Animation
+      </div>
+      <button onclick="startAnimation()" id="startBtn"
+        style="background:#28a745;color:white;border:none;
+               padding:7px 16px;border-radius:8px;cursor:pointer;
+               font-size:13px;margin-right:6px;font-weight:bold;">
+        ▶ Start
+      </button>
+      <button onclick="resetAnimation()" id="resetBtn"
+        style="background:#6c757d;color:white;border:none;
+               padding:7px 16px;border-radius:8px;cursor:pointer;
+               font-size:13px;font-weight:bold;">
+        ↺ Reset
+      </button>
+      <div style="margin-top:10px;">
+        Speed:
+        <select id="speedSelect"
+          style="padding:3px 6px;border-radius:5px;border:1px solid #ccc;">
+          <option value="800">Slow</option>
+          <option value="400" selected>Normal</option>
+          <option value="150">Fast</option>
+          <option value="50">Very Fast</option>
+        </select>
+      </div>
+      <div id="progressText"
+        style="margin-top:8px;color:#555;font-size:12px;">
+        Ready to sail...
+      </div>
+    </div>
+    
+    <script>
+    // Wait for Leaflet map to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+
+        var waypoints   = [[25.0000,57.0000],[21.0000,61.0000],[17.0000,65.0000],[13.0000,69.0000],[9.0000,73.0000],[5.0000,77.0000],[1.0000,81.0000],[-3.0000,85.0000],[-7.0000,89.0000],[-11.0000,93.0000],[-15.0000,97.0000],[-19.0000,101.0000],[-23.0000,105.0000],[-27.0000,109.0000],[-31.0000,113.0000],[-31.0000,117.0000]];
+        var totalPoints = waypoints.length;
+        var currentIdx  = 0;
+        var animTimer   = null;
+        var shipMarker  = null;
+        var trailLine   = null;
+        var trailPoints = [];
+
+        // Ship icon using a boat emoji rendered as a div icon
+        var shipIcon = L.divIcon({
+            html: '<div style="font-size:28px;line-height:1;'
+                + 'filter:drop-shadow(2px 2px 3px rgba(0,0,0,0.5));'
+                + 'transform:translate(-50%,-50%);">🚢</div>',
+            iconSize:   [36, 36],
+            iconAnchor: [18, 18],
+            className:  ''
+        });
+
+        // Find the Leaflet map object
+        function getMap() {
+            var maps = document.querySelectorAll('.folium-map');
+            if (maps.length > 0) {
+                var mapId = maps[0].id;
+                return window[mapId] || null;
+            }
+            // Try to find map from leaflet internal registry
+            for (var key in window) {
+                if (window[key] && window[key]._leaflet_id !== undefined
+                    && typeof window[key].addLayer === 'function') {
+                    return window[key];
+                }
+            }
+            return null;
+        }
+
+        window.startAnimation = function() {
+            var map = getMap();
+            if (!map) { alert('Map not ready yet — please wait a moment and try again.'); return; }
+
+            // Clear any existing animation
+            if (animTimer) { clearInterval(animTimer); }
+
+            // Reset trail
+            trailPoints = [];
+            if (trailLine) { map.removeLayer(trailLine); trailLine = null; }
+            if (shipMarker) { map.removeLayer(shipMarker); shipMarker = null; }
+
+            currentIdx = 0;
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('startBtn').style.background = '#6c757d';
+
+            // Place ship at start
+            shipMarker = L.marker(waypoints[0], {icon: shipIcon}).addTo(map);
+            trailPoints = [waypoints[0]];
+            trailLine = L.polyline(trailPoints, {
+                color: '#ff6600', weight: 3,
+                opacity: 0.8, dashArray: '6,4'
+            }).addTo(map);
+
+            var speed = parseInt(document.getElementById('speedSelect').value);
+
+            animTimer = setInterval(function() {
+                currentIdx++;
+                if (currentIdx >= totalPoints) {
+                    clearInterval(animTimer);
+                    animTimer = null;
+                    document.getElementById('progressText').innerHTML =
+                        '✅ Arrived at destination!';
+                    document.getElementById('startBtn').disabled = false;
+                    document.getElementById('startBtn').style.background = '#28a745';
+                    return;
+                }
+
+                var pos = waypoints[currentIdx];
+
+                // Move ship marker
+                shipMarker.setLatLng(pos);
+
+                // Extend orange trail
+                trailPoints.push(pos);
+                trailLine.setLatLngs(trailPoints);
+
+                // Pan map to follow ship
+                map.panTo(pos, {animate: true, duration: 0.5});
+
+                // Update progress text
+                var pct = Math.round((currentIdx / (totalPoints-1)) * 100);
+                document.getElementById('progressText').innerHTML =
+                    '⛵ Sailing... ' + pct + '% complete';
+
+            }, speed);
+        };
+
+        window.resetAnimation = function() {
+            var map = getMap();
+            if (!map) return;
+
+            if (animTimer) { clearInterval(animTimer); animTimer = null; }
+            if (shipMarker) { map.removeLayer(shipMarker); shipMarker = null; }
+            if (trailLine)  { map.removeLayer(trailLine);  trailLine  = null; }
+
+            trailPoints = [];
+            currentIdx  = 0;
+
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('startBtn').style.background = '#28a745';
+            document.getElementById('progressText').innerHTML = 'Ready to sail...';
+
+            // Zoom back to full route view
+            map.fitBounds(L.latLngBounds(waypoints));
+        };
+
+    });
+    </script>
+    
+            <div class="folium-map" id="map_e35c993f7fb565f16b321e5e9b6384cc" ></div>
         
 </body>
 <script>
     
     
-            var map_e11101502a49d2137476e4fd380574ba = L.map(
-                "map_e11101502a49d2137476e4fd380574ba",
+            var map_e35c993f7fb565f16b321e5e9b6384cc = L.map(
+                "map_e35c993f7fb565f16b321e5e9b6384cc",
                 {
                     center: [10.0, 75.0],
                     crs: L.CRS.EPSG3857,
@@ -95,7 +250,7 @@
 
         
     
-            var tile_layer_1028286a6af82c06723b646ed1d9195a = L.tileLayer(
+            var tile_layer_69c62be4ee1d9ada2a0719ee10e3a922 = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
                 {
   "minZoom": 0,
@@ -112,16 +267,16 @@
             );
         
     
-            tile_layer_1028286a6af82c06723b646ed1d9195a.addTo(map_e11101502a49d2137476e4fd380574ba);
+            tile_layer_69c62be4ee1d9ada2a0719ee10e3a922.addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
         
     
-            var poly_line_a6040b371f44d9b638672056a7a61ff1 = L.polyline(
-                [[-31.0, 117.0], [-31.0, 113.0], [-31.0, 109.0], [-31.0, 105.0], [-31.0, 101.0], [-31.0, 97.0], [-31.0, 93.0], [-31.0, 89.0], [-31.0, 85.0], [-31.0, 81.0], [-31.0, 77.0], [-31.0, 73.0], [-31.0, 69.0], [-27.0, 65.0], [-23.0, 61.0], [-19.0, 57.0], [-15.0, 53.0], [-11.0, 49.0], [-7.0, 45.0], [-3.0, 41.0]],
+            var poly_line_4678034ff2d67d7b20d6eed098e74a62 = L.polyline(
+                [[25.0, 57.0], [21.0, 61.0], [17.0, 65.0], [13.0, 69.0], [9.0, 73.0], [5.0, 77.0], [1.0, 81.0], [-3.0, 85.0], [-7.0, 89.0], [-11.0, 93.0], [-15.0, 97.0], [-19.0, 101.0], [-23.0, 105.0], [-27.0, 109.0], [-31.0, 113.0], [-31.0, 117.0]],
                 {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#0057b8", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 4}
-            ).addTo(map_e11101502a49d2137476e4fd380574ba);
+            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
         
     
-            poly_line_a6040b371f44d9b638672056a7a61ff1.bindTooltip(
+            poly_line_4678034ff2d67d7b20d6eed098e74a62.bindTooltip(
                 `<div>
                      Optimal Route
                  </div>`,
@@ -131,152 +286,106 @@
             );
         
     
-            var circle_marker_2d6281a705d0c53340035f63688ae809 = L.circleMarker(
-                [-31.0, 105.0],
+            var circle_marker_6018868d28a9f8409b064aaff9b47cba = L.circleMarker(
+                [13.0, 69.0],
                 {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_e11101502a49d2137476e4fd380574ba);
+            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
         
     
-        var popup_4d9429db5600c83d8008a448c919af23 = L.popup({
+        var popup_d4be1cf25994462853e351521f1f0748 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_fefb060270a6f796bd99a20bee5cd87f = $(`<div id="html_fefb060270a6f796bd99a20bee5cd87f" style="width: 100.0%; height: 100.0%;">Waypoint 3: -31.0°, 105.0°</div>`)[0];
-                popup_4d9429db5600c83d8008a448c919af23.setContent(html_fefb060270a6f796bd99a20bee5cd87f);
+                var html_074ca261944ca21baf2f64ce112d573a = $(`<div id="html_074ca261944ca21baf2f64ce112d573a" style="width: 100.0%; height: 100.0%;">Waypoint 3: 13.0°, 69.0°</div>`)[0];
+                popup_d4be1cf25994462853e351521f1f0748.setContent(html_074ca261944ca21baf2f64ce112d573a);
             
         
 
-        circle_marker_2d6281a705d0c53340035f63688ae809.bindPopup(popup_4d9429db5600c83d8008a448c919af23)
+        circle_marker_6018868d28a9f8409b064aaff9b47cba.bindPopup(popup_d4be1cf25994462853e351521f1f0748)
         ;
 
         
     
     
-            var circle_marker_b47c9e862c33b9ba3dd7ecfd0dd6c85d = L.circleMarker(
-                [-31.0, 93.0],
+            var circle_marker_f1ddc7e4584de1d75362bbd300bb24b6 = L.circleMarker(
+                [1.0, 81.0],
                 {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_e11101502a49d2137476e4fd380574ba);
+            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
         
     
-        var popup_1f50314adaab051570cfadecdf7ba26e = L.popup({
+        var popup_ba1f1567456eb53e56b0374c2dd22a1d = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_780e32a136293fc22a10014dddcbd3b8 = $(`<div id="html_780e32a136293fc22a10014dddcbd3b8" style="width: 100.0%; height: 100.0%;">Waypoint 6: -31.0°, 93.0°</div>`)[0];
-                popup_1f50314adaab051570cfadecdf7ba26e.setContent(html_780e32a136293fc22a10014dddcbd3b8);
+                var html_cbae3b9f270476168712e38cb5d56016 = $(`<div id="html_cbae3b9f270476168712e38cb5d56016" style="width: 100.0%; height: 100.0%;">Waypoint 6: 1.0°, 81.0°</div>`)[0];
+                popup_ba1f1567456eb53e56b0374c2dd22a1d.setContent(html_cbae3b9f270476168712e38cb5d56016);
             
         
 
-        circle_marker_b47c9e862c33b9ba3dd7ecfd0dd6c85d.bindPopup(popup_1f50314adaab051570cfadecdf7ba26e)
+        circle_marker_f1ddc7e4584de1d75362bbd300bb24b6.bindPopup(popup_ba1f1567456eb53e56b0374c2dd22a1d)
         ;
 
         
     
     
-            var circle_marker_67f48f38374027126fddadcdaa887509 = L.circleMarker(
-                [-31.0, 81.0],
+            var circle_marker_c504c97c5ddb2bc1ad7ca83465aee913 = L.circleMarker(
+                [-11.0, 93.0],
                 {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_e11101502a49d2137476e4fd380574ba);
+            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
         
     
-        var popup_be92e081940fe4c65231b97d9291eee7 = L.popup({
+        var popup_ad4c4b1bff4708f8a4037f76d6e13464 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_bfe31d73ed06d121207221e8f789d52a = $(`<div id="html_bfe31d73ed06d121207221e8f789d52a" style="width: 100.0%; height: 100.0%;">Waypoint 9: -31.0°, 81.0°</div>`)[0];
-                popup_be92e081940fe4c65231b97d9291eee7.setContent(html_bfe31d73ed06d121207221e8f789d52a);
+                var html_1c8ff872d33b94881be9f666700776d2 = $(`<div id="html_1c8ff872d33b94881be9f666700776d2" style="width: 100.0%; height: 100.0%;">Waypoint 9: -11.0°, 93.0°</div>`)[0];
+                popup_ad4c4b1bff4708f8a4037f76d6e13464.setContent(html_1c8ff872d33b94881be9f666700776d2);
             
         
 
-        circle_marker_67f48f38374027126fddadcdaa887509.bindPopup(popup_be92e081940fe4c65231b97d9291eee7)
+        circle_marker_c504c97c5ddb2bc1ad7ca83465aee913.bindPopup(popup_ad4c4b1bff4708f8a4037f76d6e13464)
         ;
 
         
     
     
-            var circle_marker_70636fa635ba0782dbe05763b8f12b47 = L.circleMarker(
-                [-31.0, 69.0],
+            var circle_marker_91cfc4c21d27a38bde035bb052002436 = L.circleMarker(
+                [-23.0, 105.0],
                 {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_e11101502a49d2137476e4fd380574ba);
+            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
         
     
-        var popup_475bb38da88bd6da603436f0126b5247 = L.popup({
+        var popup_5922636b79df4f0a43c649513b4fed80 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_f59546b00dc0f4ef7315697628066898 = $(`<div id="html_f59546b00dc0f4ef7315697628066898" style="width: 100.0%; height: 100.0%;">Waypoint 12: -31.0°, 69.0°</div>`)[0];
-                popup_475bb38da88bd6da603436f0126b5247.setContent(html_f59546b00dc0f4ef7315697628066898);
+                var html_1b09c224fea6e04c7903471d249f4103 = $(`<div id="html_1b09c224fea6e04c7903471d249f4103" style="width: 100.0%; height: 100.0%;">Waypoint 12: -23.0°, 105.0°</div>`)[0];
+                popup_5922636b79df4f0a43c649513b4fed80.setContent(html_1b09c224fea6e04c7903471d249f4103);
             
         
 
-        circle_marker_70636fa635ba0782dbe05763b8f12b47.bindPopup(popup_475bb38da88bd6da603436f0126b5247)
+        circle_marker_91cfc4c21d27a38bde035bb052002436.bindPopup(popup_5922636b79df4f0a43c649513b4fed80)
         ;
 
         
     
     
-            var circle_marker_c7b1d5b9e559b3820d609886dcc8594e = L.circleMarker(
-                [-19.0, 57.0],
-                {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_e11101502a49d2137476e4fd380574ba);
-        
-    
-        var popup_a0ff5ece8052d13bfd18cf5820211cf6 = L.popup({
-  "maxWidth": "100%",
-});
-
-        
-            
-                var html_426cccf61e3ef8c0851a8a18e1a903cc = $(`<div id="html_426cccf61e3ef8c0851a8a18e1a903cc" style="width: 100.0%; height: 100.0%;">Waypoint 15: -19.0°, 57.0°</div>`)[0];
-                popup_a0ff5ece8052d13bfd18cf5820211cf6.setContent(html_426cccf61e3ef8c0851a8a18e1a903cc);
-            
-        
-
-        circle_marker_c7b1d5b9e559b3820d609886dcc8594e.bindPopup(popup_a0ff5ece8052d13bfd18cf5820211cf6)
-        ;
-
-        
-    
-    
-            var circle_marker_75afba2bcd094353b663b9bd005b1aa9 = L.circleMarker(
-                [-7.0, 45.0],
-                {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_e11101502a49d2137476e4fd380574ba);
-        
-    
-        var popup_c2d8ce2b18617b8f83ef3803dc42c92f = L.popup({
-  "maxWidth": "100%",
-});
-
-        
-            
-                var html_152b372efbb602386ac690aad0318c97 = $(`<div id="html_152b372efbb602386ac690aad0318c97" style="width: 100.0%; height: 100.0%;">Waypoint 18: -7.0°, 45.0°</div>`)[0];
-                popup_c2d8ce2b18617b8f83ef3803dc42c92f.setContent(html_152b372efbb602386ac690aad0318c97);
-            
-        
-
-        circle_marker_75afba2bcd094353b663b9bd005b1aa9.bindPopup(popup_c2d8ce2b18617b8f83ef3803dc42c92f)
-        ;
-
-        
-    
-    
-            var marker_6a9fe327c42a0899e991332ffd25eba2 = L.marker(
-                [-31.0, 117.0],
+            var marker_0dd92b3ba931dbf54ab96e2f70ea2f65 = L.marker(
+                [25.0, 57.0],
                 {
 }
-            ).addTo(map_e11101502a49d2137476e4fd380574ba);
+            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
         
     
-            var icon_4d0a9b8f448851b4d411711fa0df44ac = L.AwesomeMarkers.icon(
+            var icon_08cc945576ab2433534c284a51278b5b = L.AwesomeMarkers.icon(
                 {
   "markerColor": "green",
   "iconColor": "white",
@@ -287,26 +396,26 @@
             );
         
     
-        var popup_b059ad97c82ed8f92d081ecd103087b5 = L.popup({
+        var popup_c99ae4eeb77b2806496ed347a58a3e84 = L.popup({
   "maxWidth": 180,
 });
 
         
             
-                var html_cb3a1202ec288fa5340763bf25c85267 = $(`<div id="html_cb3a1202ec288fa5340763bf25c85267" style="width: 100.0%; height: 100.0%;"><b>🚢 Perth</b></div>`)[0];
-                popup_b059ad97c82ed8f92d081ecd103087b5.setContent(html_cb3a1202ec288fa5340763bf25c85267);
+                var html_a012f56e5fc3b49d27d1c98e69e376b0 = $(`<div id="html_a012f56e5fc3b49d27d1c98e69e376b0" style="width: 100.0%; height: 100.0%;"><b>🚢 Dubai</b></div>`)[0];
+                popup_c99ae4eeb77b2806496ed347a58a3e84.setContent(html_a012f56e5fc3b49d27d1c98e69e376b0);
             
         
 
-        marker_6a9fe327c42a0899e991332ffd25eba2.bindPopup(popup_b059ad97c82ed8f92d081ecd103087b5)
+        marker_0dd92b3ba931dbf54ab96e2f70ea2f65.bindPopup(popup_c99ae4eeb77b2806496ed347a58a3e84)
         ;
 
         
     
     
-            marker_6a9fe327c42a0899e991332ffd25eba2.bindTooltip(
+            marker_0dd92b3ba931dbf54ab96e2f70ea2f65.bindTooltip(
                 `<div>
-                     START: Perth
+                     START: Dubai
                  </div>`,
                 {
   "sticky": true,
@@ -314,17 +423,17 @@
             );
         
     
-                marker_6a9fe327c42a0899e991332ffd25eba2.setIcon(icon_4d0a9b8f448851b4d411711fa0df44ac);
+                marker_0dd92b3ba931dbf54ab96e2f70ea2f65.setIcon(icon_08cc945576ab2433534c284a51278b5b);
             
     
-            var marker_87c16a3439908d1bd3afec3b923290f9 = L.marker(
-                [-3.0, 41.0],
+            var marker_88c85aef8b12d36dab6385580d994468 = L.marker(
+                [-31.0, 117.0],
                 {
 }
-            ).addTo(map_e11101502a49d2137476e4fd380574ba);
+            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
         
     
-            var icon_91597f7e6e2669700d4464513531b043 = L.AwesomeMarkers.icon(
+            var icon_0df3286cf28697cd8f772dcf6426a053 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "red",
   "iconColor": "white",
@@ -335,26 +444,26 @@
             );
         
     
-        var popup_285ffb13365f0b1d442ac9394d506e51 = L.popup({
+        var popup_69370c394fb9e92c881d1599340cea80 = L.popup({
   "maxWidth": 180,
 });
 
         
             
-                var html_05daec31a38ea6fa42e64ca5c8c1d052 = $(`<div id="html_05daec31a38ea6fa42e64ca5c8c1d052" style="width: 100.0%; height: 100.0%;"><b>🏁 Mombasa</b><br>ETA: <b>369.3 hrs</b><br>Risk: <b>3.0/10</b></div>`)[0];
-                popup_285ffb13365f0b1d442ac9394d506e51.setContent(html_05daec31a38ea6fa42e64ca5c8c1d052);
+                var html_36d970b4ecdf40edd58cc653900ca9b3 = $(`<div id="html_36d970b4ecdf40edd58cc653900ca9b3" style="width: 100.0%; height: 100.0%;"><b>🏁 Perth</b><br>ETA: <b>375.5 hrs</b><br>Risk: <b>2.4/10</b></div>`)[0];
+                popup_69370c394fb9e92c881d1599340cea80.setContent(html_36d970b4ecdf40edd58cc653900ca9b3);
             
         
 
-        marker_87c16a3439908d1bd3afec3b923290f9.bindPopup(popup_285ffb13365f0b1d442ac9394d506e51)
+        marker_88c85aef8b12d36dab6385580d994468.bindPopup(popup_69370c394fb9e92c881d1599340cea80)
         ;
 
         
     
     
-            marker_87c16a3439908d1bd3afec3b923290f9.bindTooltip(
+            marker_88c85aef8b12d36dab6385580d994468.bindTooltip(
                 `<div>
-                     END: Mombasa
+                     END: Perth
                  </div>`,
                 {
   "sticky": true,
@@ -362,7 +471,7 @@
             );
         
     
-                marker_87c16a3439908d1bd3afec3b923290f9.setIcon(icon_91597f7e6e2669700d4464513531b043);
+                marker_88c85aef8b12d36dab6385580d994468.setIcon(icon_0df3286cf28697cd8f772dcf6426a053);
             
 </script>
 </html>

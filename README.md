@@ -1,24 +1,20 @@
 # 🚢 Optimal Ship Routing Algorithm — Indian Ocean
 
-> A Multi-Objective Particle Swarm Optimization (MOPSO) based ship routing system  
-> developed for the Indian Ocean region. Optimizes voyage for **time**, **safety**, and **fuel efficiency** simultaneously.
+A Multi-Objective Particle Swarm Optimization (MOPSO) based ship routing system  
+developed for the Indian Ocean region. Optimizes voyage for **time**, **safety**, and **fuel efficiency** simultaneously.
 
----
-
-## 📌 Project Overview
+## Project Overview
 
 Most goods worldwide are transported by ships which rely heavily on fossil fuels.  
 This project builds an intelligent routing algorithm that suggests the **optimal route** between any two ports in the Indian Ocean based on:
 
-- 🕐 **Minimum travel time**
-- ⛈️ **Maximum weather safety** (avoids storms, high waves, strong winds)
-- ⛽ **Minimum fuel consumption**
+- **Minimum travel time**
+- **Maximum weather safety** (avoids storms, high waves, strong winds)
+- **Minimum fuel consumption**
 
 The algorithm returns a **Pareto front** — a set of best possible trade-off routes — so the ship captain or company can choose based on their priority.
 
----
-
-## 🗂️ Project Structure
+## Project Structure
 ship-routing/
 │
 ├── src/
@@ -35,7 +31,7 @@ ship-routing/
 └── README.md                 # This file
 ---
 
-## ⚙️ Algorithm — How It Works
+## Algorithm — How It Works
 
 We use **MOPSO (Multi-Objective Particle Swarm Optimization)**:
 
@@ -45,17 +41,7 @@ We use **MOPSO (Multi-Objective Particle Swarm Optimization)**:
 4. Particles move toward better solutions guided by personal best + global best
 5. After 200 iterations, the archive contains the best possible routes
 
-**Why MOPSO?**
-| Method | Multi-objective | Speed | Versatile |
-|--------|----------------|-------|-----------|
-| Dijkstra / A* | ❌ Single only | ✅ Fast | ❌ |
-| Genetic Algorithm | ✅ | 🔶 Slow | ✅ |
-| Isochrone | ❌ | ✅ Fast | ❌ |
-| **MOPSO (ours)** | ✅ | ✅ Fast | ✅ |
-
----
-
-## 🌊 Weather Model
+## Weather Model
 
 The system uses a **WeatherGrid** that models:
 - Significant wave height (metres)
@@ -67,7 +53,7 @@ The system uses a **WeatherGrid** that models:
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 ### 1. Clone the repository
 git clone https://github.com/sharmaanika0010-droid/ship-routing.git
@@ -86,11 +72,11 @@ python main.py
 
 ---
 
-## 🗺️ Sample Result (Mumbai → Mombasa)
+## Sample Result (Mumbai → Mombasa)
 
 | Rank | Travel Time | Safety Penalty | Fuel (tonnes) |
 |------|-------------|----------------|---------------|
-| #1 ✅ | 208 hours (8.7 days) | 0.0000 (safest) | 253 tonnes |
+| #1 | 208 hours (8.7 days) | 0.0000 (safest) | 253 tonnes |
 | #2 | 213 hours (8.9 days) | 105.56 | 243 tonnes |
 | #3 | 210 hours (8.8 days) | 1.95 | 250 tonnes |
 
@@ -98,7 +84,7 @@ python main.py
 
 ---
 
-## 🛳️ Customize for Any Ship
+## Customize for Any Ship
 
 Edit `ShipParams` in `main.py`:
 ship = ShipParams(
@@ -113,20 +99,20 @@ max_wind_speed_ms=18.0,
 )
 ---
 
-## 🔢 Change Origin / Destination
+## Change Origin / Destination
 run_optimisation(
 origin=(19.0, 72.8),        # Mumbai, India
 destination=(-4.0, 39.7),   # Mombasa, Kenya
 )
 ---
 
-## 📦 Dependencies
+## Dependencies
 numpy
 scipy
 matplotlib
 ---
 
-## 🗓️ Future Scope
+## Future Scope
 
 - [ ] Real-time ERA5 / CMEMS weather data integration
 - [ ] High-resolution coastline (Natural Earth 10m shapefile)
@@ -137,11 +123,11 @@ matplotlib
 
 ---
 
-## 👤 Author
+## Author
 
 **sharmaanika0010-droid**  
 B.Tech Project — Indian Ocean Ship Routing  
-Built with Python 🐍 | Open Source
+Built with Python | Open Source
 
 ---
 

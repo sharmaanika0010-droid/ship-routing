@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_e35c993f7fb565f16b321e5e9b6384cc {
+                #map_5fb1e224733e14bb42b8c696a430e4f5 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -58,16 +58,17 @@
         background:white;padding:18px 22px;border-radius:12px;
         border-left:5px solid #0057b8;
         box-shadow:0 4px 15px rgba(0,0,0,0.18);
-        font-family:Arial,sans-serif;font-size:14px;min-width:210px;">
+        font-family:Arial,sans-serif;font-size:14px;min-width:220px;">
       <div style="font-size:17px;font-weight:bold;margin-bottom:10px;">🚢 Route Summary</div>
-      <div>📍 <b>From:</b> Dubai</div>
-      <div>🏁 <b>To:</b> Perth</div>
-      <div>⏱️ <b>ETA:</b> 15d 15h</div>
-      <div>📌 <b>Stops:</b> 16 waypoints</div>
+      <div>📍 <b>From:</b> Durban</div>
+      <div>🏁 <b>To:</b>   Mombasa</div>
+      <div>⏱️ <b>ETA:</b>  6d 5h</div>
+      <div>📌 <b>Stops:</b> 8 waypoints</div>
+      <div>🗺️ <b>Places nearby:</b> 4 locations</div>
       <div style="margin-top:8px;">🛡️ <b>Risk:</b>
         <span style="background:#28a745;color:white;
           padding:2px 10px;border-radius:10px;font-weight:bold;">
-          Low (2.4/10)</span>
+          Low (1.2/10)</span>
       </div>
     </div>
     
@@ -75,7 +76,7 @@
         background:white;padding:14px 18px;border-radius:12px;
         border-left:5px solid #28a745;
         box-shadow:0 4px 15px rgba(0,0,0,0.18);
-        font-family:Arial,sans-serif;font-size:13px;min-width:180px;">
+        font-family:Arial,sans-serif;font-size:13px;min-width:200px;">
       <div style="font-size:15px;font-weight:bold;margin-bottom:10px;">
         🎬 Ship Animation
       </div>
@@ -95,79 +96,130 @@
         Speed:
         <select id="speedSelect"
           style="padding:3px 6px;border-radius:5px;border:1px solid #ccc;">
-          <option value="800">Slow</option>
-          <option value="400" selected>Normal</option>
-          <option value="150">Fast</option>
-          <option value="50">Very Fast</option>
+          <option value="1200">Slow</option>
+          <option value="500" selected>Normal</option>
+          <option value="200">Fast</option>
+          <option value="80">Very Fast</option>
         </select>
       </div>
       <div id="progressText"
         style="margin-top:8px;color:#555;font-size:12px;">
         Ready to sail...
       </div>
+      <div id="nearbyInfo"
+        style="margin-top:6px;color:#0057b8;font-size:12px;
+               font-weight:bold;min-height:16px;">
+      </div>
     </div>
     
     <script>
-    // Wait for Leaflet map to be ready
     document.addEventListener('DOMContentLoaded', function() {
 
-        var waypoints   = [[25.0000,57.0000],[21.0000,61.0000],[17.0000,65.0000],[13.0000,69.0000],[9.0000,73.0000],[5.0000,77.0000],[1.0000,81.0000],[-3.0000,85.0000],[-7.0000,89.0000],[-11.0000,93.0000],[-15.0000,97.0000],[-19.0000,101.0000],[-23.0000,105.0000],[-27.0000,109.0000],[-31.0000,113.0000],[-31.0000,117.0000]];
-        var totalPoints = waypoints.length;
-        var currentIdx  = 0;
-        var animTimer   = null;
-        var shipMarker  = null;
-        var trailLine   = null;
-        var trailPoints = [];
+        var waypoints    = [[-31.0000,29.0000],[-27.0000,33.0000],[-23.0000,37.0000],[-19.0000,41.0000],[-15.0000,41.0000],[-11.0000,41.0000],[-7.0000,41.0000],[-3.0000,41.0000]];
+        var nearbyPlaces = [{wpIdx:1,lat:-25.9,lon:32.6,name:'Maputo',type:'🏙️ Port',desc:'Capital of Mozambique',dist:129},{wpIdx:6,lat:-6.8,lon:39.3,name:'Dar es Salaam',type:'🏙️ Port',desc:'Tanzania — major port city',dist:189}];
+        var totalPoints  = waypoints.length;
+        var currentIdx   = 0;
+        var animTimer    = null;
+        var shipMarker   = null;
+        var trailLine    = null;
+        var trailPoints  = [];
+        var popupMarkers = [];
+        var shownPlaces  = {};
 
-        // Ship icon using a boat emoji rendered as a div icon
+        // ── Ship emoji icon ──
         var shipIcon = L.divIcon({
-            html: '<div style="font-size:28px;line-height:1;'
-                + 'filter:drop-shadow(2px 2px 3px rgba(0,0,0,0.5));'
+            html: '<div style="font-size:30px;line-height:1;'
+                + 'filter:drop-shadow(2px 2px 4px rgba(0,0,0,0.6));'
                 + 'transform:translate(-50%,-50%);">🚢</div>',
-            iconSize:   [36, 36],
-            iconAnchor: [18, 18],
+            iconSize:   [38,38],
+            iconAnchor: [19,19],
             className:  ''
         });
 
-        // Find the Leaflet map object
+        // ── Find Leaflet map ──
         function getMap() {
-            var maps = document.querySelectorAll('.folium-map');
-            if (maps.length > 0) {
-                var mapId = maps[0].id;
-                return window[mapId] || null;
-            }
-            // Try to find map from leaflet internal registry
             for (var key in window) {
-                if (window[key] && window[key]._leaflet_id !== undefined
-                    && typeof window[key].addLayer === 'function') {
-                    return window[key];
-                }
+                try {
+                    if (window[key] && window[key]._leaflet_id !== undefined
+                        && typeof window[key].addLayer === 'function') {
+                        return window[key];
+                    }
+                } catch(e) {}
             }
             return null;
         }
 
+        // ── Show a place popup that fades out ──
+        function showPlacePopup(map, place) {
+            var icon = L.divIcon({
+                html: '<div style="'
+                    + 'background:white;'
+                    + 'border:2px solid #ff8c00;'
+                    + 'border-radius:10px;'
+                    + 'padding:6px 10px;'
+                    + 'font-family:Arial,sans-serif;'
+                    + 'font-size:12px;'
+                    + 'font-weight:bold;'
+                    + 'box-shadow:0 3px 10px rgba(0,0,0,0.25);'
+                    + 'white-space:nowrap;'
+                    + 'min-width:140px;'
+                    + 'text-align:center;'
+                    + '">'
+                    + place.type + ' ' + place.name
+                    + '<br><span style="font-weight:normal;color:#555;font-size:11px;">'
+                    + place.desc
+                    + '</span>'
+                    + '<br><span style="color:#0057b8;font-size:10px;">~'
+                    + place.dist + ' km from route</span>'
+                    + '</div>',
+                iconSize:   [160, 70],
+                iconAnchor: [80, 35],
+                className:  ''
+            });
+
+            var marker = L.marker([place.lat, place.lon], {icon:icon}).addTo(map);
+            popupMarkers.push(marker);
+
+            // Update side panel
+            document.getElementById('nearbyInfo').innerHTML =
+                '📍 Passing near: <b>' + place.name + '</b>';
+
+            // Auto-remove popup after 3 seconds
+            setTimeout(function() {
+                try { map.removeLayer(marker); } catch(e) {}
+            }, 3000);
+        }
+
+        // ── Start animation ──
         window.startAnimation = function() {
             var map = getMap();
-            if (!map) { alert('Map not ready yet — please wait a moment and try again.'); return; }
+            if (!map) {
+                alert('Map not ready — please wait a second and try again.');
+                return;
+            }
 
-            // Clear any existing animation
+            // Clear previous
             if (animTimer) { clearInterval(animTimer); }
-
-            // Reset trail
-            trailPoints = [];
-            if (trailLine) { map.removeLayer(trailLine); trailLine = null; }
-            if (shipMarker) { map.removeLayer(shipMarker); shipMarker = null; }
+            popupMarkers.forEach(function(mk) {
+                try { map.removeLayer(mk); } catch(e) {}
+            });
+            popupMarkers = [];
+            trailPoints  = [];
+            shownPlaces  = {};
+            if (trailLine)   { map.removeLayer(trailLine);   trailLine  = null; }
+            if (shipMarker)  { map.removeLayer(shipMarker);  shipMarker = null; }
 
             currentIdx = 0;
+
             document.getElementById('startBtn').disabled = true;
             document.getElementById('startBtn').style.background = '#6c757d';
+            document.getElementById('nearbyInfo').innerHTML = '';
 
             // Place ship at start
-            shipMarker = L.marker(waypoints[0], {icon: shipIcon}).addTo(map);
+            shipMarker  = L.marker(waypoints[0], {icon:shipIcon}).addTo(map);
             trailPoints = [waypoints[0]];
-            trailLine = L.polyline(trailPoints, {
-                color: '#ff6600', weight: 3,
-                opacity: 0.8, dashArray: '6,4'
+            trailLine   = L.polyline(trailPoints, {
+                color:'#ff6600', weight:3, opacity:0.85, dashArray:'6,4'
             }).addTo(map);
 
             var speed = parseInt(document.getElementById('speedSelect').value);
@@ -178,62 +230,80 @@
                     clearInterval(animTimer);
                     animTimer = null;
                     document.getElementById('progressText').innerHTML =
-                        '✅ Arrived at destination!';
-                    document.getElementById('startBtn').disabled = false;
+                        '✅ Arrived at ' + 'Mombasa' + '!';
+                    document.getElementById('nearbyInfo').innerHTML =
+                        '🏁 Journey complete!';
+                    document.getElementById('startBtn').disabled  = false;
                     document.getElementById('startBtn').style.background = '#28a745';
                     return;
                 }
 
                 var pos = waypoints[currentIdx];
 
-                // Move ship marker
+                // Move ship
                 shipMarker.setLatLng(pos);
 
-                // Extend orange trail
+                // Extend trail
                 trailPoints.push(pos);
                 trailLine.setLatLngs(trailPoints);
 
-                // Pan map to follow ship
-                map.panTo(pos, {animate: true, duration: 0.5});
+                // Smooth pan
+                map.panTo(pos, {animate:true, duration:0.4});
 
-                // Update progress text
+                // Progress %
                 var pct = Math.round((currentIdx / (totalPoints-1)) * 100);
                 document.getElementById('progressText').innerHTML =
-                    '⛵ Sailing... ' + pct + '% complete';
+                    '⛵ Sailing... ' + pct + '%';
+
+                // ── Check for nearby places ──
+                nearbyPlaces.forEach(function(place) {
+                    if (shownPlaces[place.name]) return;
+                    if (place.wpIdx === currentIdx ||
+                        Math.abs(place.wpIdx - currentIdx) <= 1) {
+                        shownPlaces[place.name] = true;
+                        showPlacePopup(map, place);
+                    }
+                });
 
             }, speed);
         };
 
+        // ── Reset animation ──
         window.resetAnimation = function() {
             var map = getMap();
             if (!map) return;
 
             if (animTimer) { clearInterval(animTimer); animTimer = null; }
+            popupMarkers.forEach(function(mk) {
+                try { map.removeLayer(mk); } catch(e) {}
+            });
+            popupMarkers = [];
             if (shipMarker) { map.removeLayer(shipMarker); shipMarker = null; }
             if (trailLine)  { map.removeLayer(trailLine);  trailLine  = null; }
 
             trailPoints = [];
+            shownPlaces = {};
             currentIdx  = 0;
 
             document.getElementById('startBtn').disabled = false;
             document.getElementById('startBtn').style.background = '#28a745';
             document.getElementById('progressText').innerHTML = 'Ready to sail...';
+            document.getElementById('nearbyInfo').innerHTML   = '';
 
-            // Zoom back to full route view
             map.fitBounds(L.latLngBounds(waypoints));
         };
 
     });
     </script>
     
-            <div class="folium-map" id="map_e35c993f7fb565f16b321e5e9b6384cc" ></div>
+            <div class="folium-map" id="map_5fb1e224733e14bb42b8c696a430e4f5" ></div>
         
 </body>
 <script>
     
     
-            var map_e35c993f7fb565f16b321e5e9b6384cc = L.map(
-                "map_e35c993f7fb565f16b321e5e9b6384cc",
+            var map_5fb1e224733e14bb42b8c696a430e4f5 = L.map(
+                "map_5fb1e224733e14bb42b8c696a430e4f5",
                 {
                     center: [10.0, 75.0],
                     crs: L.CRS.EPSG3857,
@@ -250,7 +320,7 @@
 
         
     
-            var tile_layer_69c62be4ee1d9ada2a0719ee10e3a922 = L.tileLayer(
+            var tile_layer_27ad84e25c5cdc20e497457876075258 = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
                 {
   "minZoom": 0,
@@ -267,16 +337,16 @@
             );
         
     
-            tile_layer_69c62be4ee1d9ada2a0719ee10e3a922.addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
+            tile_layer_27ad84e25c5cdc20e497457876075258.addTo(map_5fb1e224733e14bb42b8c696a430e4f5);
         
     
-            var poly_line_4678034ff2d67d7b20d6eed098e74a62 = L.polyline(
-                [[25.0, 57.0], [21.0, 61.0], [17.0, 65.0], [13.0, 69.0], [9.0, 73.0], [5.0, 77.0], [1.0, 81.0], [-3.0, 85.0], [-7.0, 89.0], [-11.0, 93.0], [-15.0, 97.0], [-19.0, 101.0], [-23.0, 105.0], [-27.0, 109.0], [-31.0, 113.0], [-31.0, 117.0]],
+            var poly_line_6d80e9a38f4cfe10cff4e9b580ec3879 = L.polyline(
+                [[-31.0, 29.0], [-27.0, 33.0], [-23.0, 37.0], [-19.0, 41.0], [-15.0, 41.0], [-11.0, 41.0], [-7.0, 41.0], [-3.0, 41.0]],
                 {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#0057b8", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 4}
-            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
+            ).addTo(map_5fb1e224733e14bb42b8c696a430e4f5);
         
     
-            poly_line_4678034ff2d67d7b20d6eed098e74a62.bindTooltip(
+            poly_line_6d80e9a38f4cfe10cff4e9b580ec3879.bindTooltip(
                 `<div>
                      Optimal Route
                  </div>`,
@@ -286,106 +356,60 @@
             );
         
     
-            var circle_marker_6018868d28a9f8409b064aaff9b47cba = L.circleMarker(
-                [13.0, 69.0],
+            var circle_marker_f3f60b1afbd679701bc1d77c3beb2afd = L.circleMarker(
+                [-19.0, 41.0],
                 {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
+            ).addTo(map_5fb1e224733e14bb42b8c696a430e4f5);
         
     
-        var popup_d4be1cf25994462853e351521f1f0748 = L.popup({
+        var popup_273f984372314193c097eebdaa924f52 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_074ca261944ca21baf2f64ce112d573a = $(`<div id="html_074ca261944ca21baf2f64ce112d573a" style="width: 100.0%; height: 100.0%;">Waypoint 3: 13.0°, 69.0°</div>`)[0];
-                popup_d4be1cf25994462853e351521f1f0748.setContent(html_074ca261944ca21baf2f64ce112d573a);
+                var html_5c23dc4da76c3ee225efd2b09e983067 = $(`<div id="html_5c23dc4da76c3ee225efd2b09e983067" style="width: 100.0%; height: 100.0%;">Waypoint 3</div>`)[0];
+                popup_273f984372314193c097eebdaa924f52.setContent(html_5c23dc4da76c3ee225efd2b09e983067);
             
         
 
-        circle_marker_6018868d28a9f8409b064aaff9b47cba.bindPopup(popup_d4be1cf25994462853e351521f1f0748)
+        circle_marker_f3f60b1afbd679701bc1d77c3beb2afd.bindPopup(popup_273f984372314193c097eebdaa924f52)
         ;
 
         
     
     
-            var circle_marker_f1ddc7e4584de1d75362bbd300bb24b6 = L.circleMarker(
-                [1.0, 81.0],
+            var circle_marker_f91018b8a83baa12f48c125d453d034b = L.circleMarker(
+                [-7.0, 41.0],
                 {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
+            ).addTo(map_5fb1e224733e14bb42b8c696a430e4f5);
         
     
-        var popup_ba1f1567456eb53e56b0374c2dd22a1d = L.popup({
+        var popup_32c256aa7ce5b16927c7c8387982e158 = L.popup({
   "maxWidth": "100%",
 });
 
         
             
-                var html_cbae3b9f270476168712e38cb5d56016 = $(`<div id="html_cbae3b9f270476168712e38cb5d56016" style="width: 100.0%; height: 100.0%;">Waypoint 6: 1.0°, 81.0°</div>`)[0];
-                popup_ba1f1567456eb53e56b0374c2dd22a1d.setContent(html_cbae3b9f270476168712e38cb5d56016);
+                var html_bc0c0f78ba054002cf8b0faf5cbfaf6e = $(`<div id="html_bc0c0f78ba054002cf8b0faf5cbfaf6e" style="width: 100.0%; height: 100.0%;">Waypoint 6</div>`)[0];
+                popup_32c256aa7ce5b16927c7c8387982e158.setContent(html_bc0c0f78ba054002cf8b0faf5cbfaf6e);
             
         
 
-        circle_marker_f1ddc7e4584de1d75362bbd300bb24b6.bindPopup(popup_ba1f1567456eb53e56b0374c2dd22a1d)
+        circle_marker_f91018b8a83baa12f48c125d453d034b.bindPopup(popup_32c256aa7ce5b16927c7c8387982e158)
         ;
 
         
     
     
-            var circle_marker_c504c97c5ddb2bc1ad7ca83465aee913 = L.circleMarker(
-                [-11.0, 93.0],
-                {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
-        
-    
-        var popup_ad4c4b1bff4708f8a4037f76d6e13464 = L.popup({
-  "maxWidth": "100%",
-});
-
-        
-            
-                var html_1c8ff872d33b94881be9f666700776d2 = $(`<div id="html_1c8ff872d33b94881be9f666700776d2" style="width: 100.0%; height: 100.0%;">Waypoint 9: -11.0°, 93.0°</div>`)[0];
-                popup_ad4c4b1bff4708f8a4037f76d6e13464.setContent(html_1c8ff872d33b94881be9f666700776d2);
-            
-        
-
-        circle_marker_c504c97c5ddb2bc1ad7ca83465aee913.bindPopup(popup_ad4c4b1bff4708f8a4037f76d6e13464)
-        ;
-
-        
-    
-    
-            var circle_marker_91cfc4c21d27a38bde035bb052002436 = L.circleMarker(
-                [-23.0, 105.0],
-                {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
-        
-    
-        var popup_5922636b79df4f0a43c649513b4fed80 = L.popup({
-  "maxWidth": "100%",
-});
-
-        
-            
-                var html_1b09c224fea6e04c7903471d249f4103 = $(`<div id="html_1b09c224fea6e04c7903471d249f4103" style="width: 100.0%; height: 100.0%;">Waypoint 12: -23.0°, 105.0°</div>`)[0];
-                popup_5922636b79df4f0a43c649513b4fed80.setContent(html_1b09c224fea6e04c7903471d249f4103);
-            
-        
-
-        circle_marker_91cfc4c21d27a38bde035bb052002436.bindPopup(popup_5922636b79df4f0a43c649513b4fed80)
-        ;
-
-        
-    
-    
-            var marker_0dd92b3ba931dbf54ab96e2f70ea2f65 = L.marker(
-                [25.0, 57.0],
+            var marker_e5f9e0a8d1c3cc4105e7e8059734b6df = L.marker(
+                [-31.0, 29.0],
                 {
 }
-            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
+            ).addTo(map_5fb1e224733e14bb42b8c696a430e4f5);
         
     
-            var icon_08cc945576ab2433534c284a51278b5b = L.AwesomeMarkers.icon(
+            var icon_67c0ca9fbb9c809197c6e5b9b790b423 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "green",
   "iconColor": "white",
@@ -396,26 +420,26 @@
             );
         
     
-        var popup_c99ae4eeb77b2806496ed347a58a3e84 = L.popup({
+        var popup_711941009a96e000afe976f3872d1443 = L.popup({
   "maxWidth": 180,
 });
 
         
             
-                var html_a012f56e5fc3b49d27d1c98e69e376b0 = $(`<div id="html_a012f56e5fc3b49d27d1c98e69e376b0" style="width: 100.0%; height: 100.0%;"><b>🚢 Dubai</b></div>`)[0];
-                popup_c99ae4eeb77b2806496ed347a58a3e84.setContent(html_a012f56e5fc3b49d27d1c98e69e376b0);
+                var html_860888a0a203d7d4194267de186357f2 = $(`<div id="html_860888a0a203d7d4194267de186357f2" style="width: 100.0%; height: 100.0%;"><b>🚢 Durban</b><br>Departure port</div>`)[0];
+                popup_711941009a96e000afe976f3872d1443.setContent(html_860888a0a203d7d4194267de186357f2);
             
         
 
-        marker_0dd92b3ba931dbf54ab96e2f70ea2f65.bindPopup(popup_c99ae4eeb77b2806496ed347a58a3e84)
+        marker_e5f9e0a8d1c3cc4105e7e8059734b6df.bindPopup(popup_711941009a96e000afe976f3872d1443)
         ;
 
         
     
     
-            marker_0dd92b3ba931dbf54ab96e2f70ea2f65.bindTooltip(
+            marker_e5f9e0a8d1c3cc4105e7e8059734b6df.bindTooltip(
                 `<div>
-                     START: Dubai
+                     START: Durban
                  </div>`,
                 {
   "sticky": true,
@@ -423,17 +447,17 @@
             );
         
     
-                marker_0dd92b3ba931dbf54ab96e2f70ea2f65.setIcon(icon_08cc945576ab2433534c284a51278b5b);
+                marker_e5f9e0a8d1c3cc4105e7e8059734b6df.setIcon(icon_67c0ca9fbb9c809197c6e5b9b790b423);
             
     
-            var marker_88c85aef8b12d36dab6385580d994468 = L.marker(
-                [-31.0, 117.0],
+            var marker_52aebfd10123596df7917b3d7a4fda1a = L.marker(
+                [-3.0, 41.0],
                 {
 }
-            ).addTo(map_e35c993f7fb565f16b321e5e9b6384cc);
+            ).addTo(map_5fb1e224733e14bb42b8c696a430e4f5);
         
     
-            var icon_0df3286cf28697cd8f772dcf6426a053 = L.AwesomeMarkers.icon(
+            var icon_46157bdf05c04daf5fdaa97ce314926c = L.AwesomeMarkers.icon(
                 {
   "markerColor": "red",
   "iconColor": "white",
@@ -444,26 +468,26 @@
             );
         
     
-        var popup_69370c394fb9e92c881d1599340cea80 = L.popup({
+        var popup_144dc6ed7865390b9dc2433038b662f4 = L.popup({
   "maxWidth": 180,
 });
 
         
             
-                var html_36d970b4ecdf40edd58cc653900ca9b3 = $(`<div id="html_36d970b4ecdf40edd58cc653900ca9b3" style="width: 100.0%; height: 100.0%;"><b>🏁 Perth</b><br>ETA: <b>375.5 hrs</b><br>Risk: <b>2.4/10</b></div>`)[0];
-                popup_69370c394fb9e92c881d1599340cea80.setContent(html_36d970b4ecdf40edd58cc653900ca9b3);
+                var html_0c16df3b571c776abaed0370e83b89f9 = $(`<div id="html_0c16df3b571c776abaed0370e83b89f9" style="width: 100.0%; height: 100.0%;"><b>🏁 Mombasa</b><br>ETA: <b>149.1 hrs</b><br>Risk: <b>1.2/10</b></div>`)[0];
+                popup_144dc6ed7865390b9dc2433038b662f4.setContent(html_0c16df3b571c776abaed0370e83b89f9);
             
         
 
-        marker_88c85aef8b12d36dab6385580d994468.bindPopup(popup_69370c394fb9e92c881d1599340cea80)
+        marker_52aebfd10123596df7917b3d7a4fda1a.bindPopup(popup_144dc6ed7865390b9dc2433038b662f4)
         ;
 
         
     
     
-            marker_88c85aef8b12d36dab6385580d994468.bindTooltip(
+            marker_52aebfd10123596df7917b3d7a4fda1a.bindTooltip(
                 `<div>
-                     END: Perth
+                     END: Mombasa
                  </div>`,
                 {
   "sticky": true,
@@ -471,7 +495,103 @@
             );
         
     
-                marker_88c85aef8b12d36dab6385580d994468.setIcon(icon_0df3286cf28697cd8f772dcf6426a053);
+                marker_52aebfd10123596df7917b3d7a4fda1a.setIcon(icon_46157bdf05c04daf5fdaa97ce314926c);
+            
+    
+            var marker_61b8570041bd03496c6e92586e51d91f = L.marker(
+                [-25.9, 32.6],
+                {
+}
+            ).addTo(map_5fb1e224733e14bb42b8c696a430e4f5);
+        
+    
+            var icon_6845f07638a26af0eff7727c1b6674fb = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "anchor",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_12bbcd9c7332dff72c65420caf6bf9aa = L.popup({
+  "maxWidth": 220,
+});
+
+        
+            
+                var html_c780de41b832123494298f125d48e554 = $(`<div id="html_c780de41b832123494298f125d48e554" style="width: 100.0%; height: 100.0%;"><b>🏙️ Port Maputo</b><br><span style='color:#555;font-size:12px;'>Capital of Mozambique</span><br><span style='color:#0057b8;font-size:11px;'>~129 km from route</span></div>`)[0];
+                popup_12bbcd9c7332dff72c65420caf6bf9aa.setContent(html_c780de41b832123494298f125d48e554);
+            
+        
+
+        marker_61b8570041bd03496c6e92586e51d91f.bindPopup(popup_12bbcd9c7332dff72c65420caf6bf9aa)
+        ;
+
+        
+    
+    
+            marker_61b8570041bd03496c6e92586e51d91f.bindTooltip(
+                `<div>
+                     🏙️ Port Maputo
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_61b8570041bd03496c6e92586e51d91f.setIcon(icon_6845f07638a26af0eff7727c1b6674fb);
+            
+    
+            var marker_67095566acf685eb419a5bf799e33d5a = L.marker(
+                [-6.8, 39.3],
+                {
+}
+            ).addTo(map_5fb1e224733e14bb42b8c696a430e4f5);
+        
+    
+            var icon_8b1134cebae05291f97965536bdc27ca = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "anchor",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6019bc7fc7ba03918fe572b588dcc8cc = L.popup({
+  "maxWidth": 220,
+});
+
+        
+            
+                var html_5851acbad92fccd3c5fbeeb2e6006087 = $(`<div id="html_5851acbad92fccd3c5fbeeb2e6006087" style="width: 100.0%; height: 100.0%;"><b>🏙️ Port Dar es Salaam</b><br><span style='color:#555;font-size:12px;'>Tanzania — major port city</span><br><span style='color:#0057b8;font-size:11px;'>~189 km from route</span></div>`)[0];
+                popup_6019bc7fc7ba03918fe572b588dcc8cc.setContent(html_5851acbad92fccd3c5fbeeb2e6006087);
+            
+        
+
+        marker_67095566acf685eb419a5bf799e33d5a.bindPopup(popup_6019bc7fc7ba03918fe572b588dcc8cc)
+        ;
+
+        
+    
+    
+            marker_67095566acf685eb419a5bf799e33d5a.bindTooltip(
+                `<div>
+                     🏙️ Port Dar es Salaam
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_67095566acf685eb419a5bf799e33d5a.setIcon(icon_8b1134cebae05291f97965536bdc27ca);
             
 </script>
 </html>

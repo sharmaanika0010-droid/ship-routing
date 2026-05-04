@@ -14,21 +14,19 @@ def haversine(lat1, lon1, lat2, lon2):
 
 class RouteOptimizer:
     LAT_MIN, LAT_MAX = -35, 30
-    LON_MIN, LON_MAX =  25, 120
+    LON_MIN, LON_MAX = 25, 120
     GRID_STEP = 4
 
     def __init__(self, start, end, ship, weather_client, mode="time"):
-        self.start   = start
-        self.end     = end
-        self.ship    = ship
+        self.start = start
+        self.end = end
+        self.ship = ship
         self.weather = weather_client
-        self.mode    = mode
+        self.mode = mode
 
     def _is_ocean(self, lat, lon):
-        # Indian subcontinent core only
         if 15 < lat < 23 and 73 < lon < 77:
             return False
-        # Arabian Peninsula core only
         if 18 < lat < 25 and 52 < lon < 57:
             return False
         return True
@@ -67,7 +65,7 @@ class RouteOptimizer:
         if not self._is_ocean(mid_lat, mid_lon):
             return float("inf")
 
-        wx     = self.weather.fetch(mid_lat, mid_lon)
+        wx = self.weather.fetch(mid_lat, mid_lon)
         wave_h = wx["wave_height"]
         wind_s = wx["wind_speed"]
 
@@ -85,9 +83,9 @@ class RouteOptimizer:
         return nodes[int(np.argmin(dists))]
 
     def calculate(self):
-        G          = self._build_graph()
+        G = self._build_graph()
         start_node = self._nearest_node(G, self.start)
-        end_node   = self._nearest_node(G, self.end)
+        end_node = self._nearest_node(G, self.end)
 
         print(f"  🟢 Start node : {start_node}")
         print(f"  🔴 End node   : {end_node}")

@@ -11,16 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 1 - Download code
+    - name: Download code
       uses: actions/checkout@v3
 
-    - name: 2 - Setup Python
+    - name: Setup Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
 
-    - name: 3 - Install libraries
+    - name: Install libraries
       run: pip install -r requirements.txt
 
-    - name: 4 - Run tests
+    - name: Run tests
       run: pytest tests/ -v

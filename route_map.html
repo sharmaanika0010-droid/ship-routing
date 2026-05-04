@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_fe4d851327c077bb1c957f2ba2435475 {
+                #map_7a45b6445579add7a9e5230c5c754d74 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -54,256 +54,358 @@
 <body>
     
     
-    <div style="position:fixed;bottom:30px;left:30px;z-index:1000;
-        background:white;padding:18px 22px;border-radius:12px;
-        border-left:5px solid #0057b8;
-        box-shadow:0 4px 15px rgba(0,0,0,0.18);
-        font-family:Arial,sans-serif;font-size:14px;min-width:220px;">
-      <div style="font-size:17px;font-weight:bold;margin-bottom:10px;">🚢 Route Summary</div>
-      <div>📍 <b>From:</b> Kolkata</div>
-      <div>🏁 <b>To:</b>   Colombo</div>
-      <div>⏱️ <b>ETA:</b>  3d 16h</div>
-      <div>📌 <b>Stops:</b> 5 waypoints</div>
-      <div>🗺️ <b>Places nearby:</b> 6 locations</div>
-      <div style="margin-top:8px;">🛡️ <b>Risk:</b>
-        <span style="background:#28a745;color:white;
-          padding:2px 10px;border-radius:10px;font-weight:bold;">
-          Low (0.8/10)</span>
+    <div style="position:fixed;top:15px;left:15px;z-index:1000;
+        background:white;border-radius:14px;
+        box-shadow:0 4px 20px rgba(0,0,0,0.18);
+        font-family:Arial,sans-serif;
+        width:265px;max-height:92vh;
+        display:flex;flex-direction:column;overflow:hidden;">
+
+      <!-- Header -->
+      <div style="background:#0d2b4e;color:white;
+                  padding:13px 15px;border-radius:14px 14px 0 0;flex-shrink:0;">
+        <div style="font-size:15px;font-weight:bold;">
+          🚢 Dubai &rarr; Perth
+        </div>
+        <div style="font-size:11px;opacity:0.85;margin-top:5px;line-height:1.8;">
+          ⏱️ ETA: <b>11d 18h</b> &nbsp;|&nbsp;
+          📌 <b>16</b> waypoints<br>
+          🛡️ Risk:
+          <span style="background:#28a745;color:white;
+            padding:1px 8px;border-radius:8px;font-weight:bold;font-size:11px;">
+            Low (2.4/10)
+          </span>
+        </div>
+      </div>
+
+      <!-- Section title -->
+      <div style="padding:9px 14px 5px;font-size:12px;font-weight:bold;
+                  color:#0d2b4e;border-bottom:1px solid #eee;
+                  flex-shrink:0;background:#f0f4f8;">
+        🗺️ PLACES ALONG ROUTE &nbsp;
+        <span style="background:#0d2b4e;color:white;border-radius:10px;
+              padding:1px 8px;font-size:11px;">10</span>
+      </div>
+
+      <!-- Scrollable list -->
+      <div id="journeyList"
+           style="overflow-y:auto;padding:10px 10px;flex:1;">
+        <div id="ji_1" style="
+            display:flex;align-items:flex-start;
+            padding:8px 10px;border-radius:8px;margin-bottom:6px;
+            background:#f8f9fa;border-left:3px solid #dee2e6;
+            transition:all 0.4s ease;opacity:0.45;">
+          <div style="font-size:20px;margin-right:10px;margin-top:1px;min-width:24px;">🌆</div>
+          <div>
+            <div style="font-weight:bold;font-size:13px;color:#1a1a2e;">Abu Dhabi</div>
+            <div style="font-size:11px;color:#888;margin-top:1px;">City &bull; ~268 km away</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">Capital of the UAE</div>
+          </div>
+        </div><div id="ji_2" style="
+            display:flex;align-items:flex-start;
+            padding:8px 10px;border-radius:8px;margin-bottom:6px;
+            background:#f8f9fa;border-left:3px solid #dee2e6;
+            transition:all 0.4s ease;opacity:0.45;">
+          <div style="font-size:20px;margin-right:10px;margin-top:1px;min-width:24px;">🏙️</div>
+          <div>
+            <div style="font-weight:bold;font-size:13px;color:#1a1a2e;">Muscat</div>
+            <div style="font-size:11px;color:#888;margin-top:1px;">Port &bull; ~225 km away</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">Capital of Oman</div>
+          </div>
+        </div><div id="ji_3" style="
+            display:flex;align-items:flex-start;
+            padding:8px 10px;border-radius:8px;margin-bottom:6px;
+            background:#f8f9fa;border-left:3px solid #dee2e6;
+            transition:all 0.4s ease;opacity:0.45;">
+          <div style="font-size:20px;margin-right:10px;margin-top:1px;min-width:24px;">🌊</div>
+          <div>
+            <div style="font-weight:bold;font-size:13px;color:#1a1a2e;">Arabian Sea</div>
+            <div style="font-size:11px;color:#888;margin-top:1px;">Sea &bull; ~236 km away</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">Monsoon weather zone</div>
+          </div>
+        </div><div id="ji_4" style="
+            display:flex;align-items:flex-start;
+            padding:8px 10px;border-radius:8px;margin-bottom:6px;
+            background:#f8f9fa;border-left:3px solid #dee2e6;
+            transition:all 0.4s ease;opacity:0.45;">
+          <div style="font-size:20px;margin-right:10px;margin-top:1px;min-width:24px;">🌊</div>
+          <div>
+            <div style="font-weight:bold;font-size:13px;color:#1a1a2e;">Gulf of Aden</div>
+            <div style="font-size:11px;color:#888;margin-top:1px;">Gulf &bull; ~579 km away</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">Connects Red Sea to Arabian Sea</div>
+          </div>
+        </div><div id="ji_5" style="
+            display:flex;align-items:flex-start;
+            padding:8px 10px;border-radius:8px;margin-bottom:6px;
+            background:#f8f9fa;border-left:3px solid #dee2e6;
+            transition:all 0.4s ease;opacity:0.45;">
+          <div style="font-size:20px;margin-right:10px;margin-top:1px;min-width:24px;">🏖️</div>
+          <div>
+            <div style="font-weight:bold;font-size:13px;color:#1a1a2e;">Goa</div>
+            <div style="font-size:11px;color:#888;margin-top:1px;">City &bull; ~587 km away</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">Famous Indian coastal city</div>
+          </div>
+        </div><div id="ji_6" style="
+            display:flex;align-items:flex-start;
+            padding:8px 10px;border-radius:8px;margin-bottom:6px;
+            background:#f8f9fa;border-left:3px solid #dee2e6;
+            transition:all 0.4s ease;opacity:0.45;">
+          <div style="font-size:20px;margin-right:10px;margin-top:1px;min-width:24px;">⚓</div>
+          <div>
+            <div style="font-weight:bold;font-size:13px;color:#1a1a2e;">Kochi</div>
+            <div style="font-size:11px;color:#888;margin-top:1px;">Port &bull; ~376 km away</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">Historic spice trade port, Kerala</div>
+          </div>
+        </div><div id="ji_7" style="
+            display:flex;align-items:flex-start;
+            padding:8px 10px;border-radius:8px;margin-bottom:6px;
+            background:#f8f9fa;border-left:3px solid #dee2e6;
+            transition:all 0.4s ease;opacity:0.45;">
+          <div style="font-size:20px;margin-right:10px;margin-top:1px;min-width:24px;">🏝️</div>
+          <div>
+            <div style="font-weight:bold;font-size:13px;color:#1a1a2e;">Chagos Archipelago</div>
+            <div style="font-size:11px;color:#888;margin-top:1px;">Island &bull; ~458 km away</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">British Indian Ocean Territory</div>
+          </div>
+        </div><div id="ji_8" style="
+            display:flex;align-items:flex-start;
+            padding:8px 10px;border-radius:8px;margin-bottom:6px;
+            background:#f8f9fa;border-left:3px solid #dee2e6;
+            transition:all 0.4s ease;opacity:0.45;">
+          <div style="font-size:20px;margin-right:10px;margin-top:1px;min-width:24px;">🏙️</div>
+          <div>
+            <div style="font-weight:bold;font-size:13px;color:#1a1a2e;">Thiruvananthapuram</div>
+            <div style="font-size:11px;color:#888;margin-top:1px;">City &bull; ~389 km away</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">Southernmost major Indian city</div>
+          </div>
+        </div><div id="ji_9" style="
+            display:flex;align-items:flex-start;
+            padding:8px 10px;border-radius:8px;margin-bottom:6px;
+            background:#f8f9fa;border-left:3px solid #dee2e6;
+            transition:all 0.4s ease;opacity:0.45;">
+          <div style="font-size:20px;margin-right:10px;margin-top:1px;min-width:24px;">🏙️</div>
+          <div>
+            <div style="font-weight:bold;font-size:13px;color:#1a1a2e;">Colombo</div>
+            <div style="font-size:11px;color:#888;margin-top:1px;">Port &bull; ~375 km away</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">Capital and main port of Sri Lanka</div>
+          </div>
+        </div><div id="ji_10" style="
+            display:flex;align-items:flex-start;
+            padding:8px 10px;border-radius:8px;margin-bottom:6px;
+            background:#f8f9fa;border-left:3px solid #dee2e6;
+            transition:all 0.4s ease;opacity:0.45;">
+          <div style="font-size:20px;margin-right:10px;margin-top:1px;min-width:24px;">⚓</div>
+          <div>
+            <div style="font-weight:bold;font-size:13px;color:#1a1a2e;">Trincomalee</div>
+            <div style="font-size:11px;color:#888;margin-top:1px;">Port &bull; ~547 km away</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">Natural deep-water harbour, Sri Lanka</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current place footer -->
+      <div id="currentPlace" style="display:none;flex-shrink:0;
+          padding:10px 14px;border-top:2px solid #ff8c00;
+          background:#fff8f0;">
+        <div style="font-size:10px;color:#999;margin-bottom:3px;
+                    text-transform:uppercase;letter-spacing:0.5px;">
+          Currently passing near
+        </div>
+        <div id="cpLine" style="font-size:14px;font-weight:bold;color:#1a1a2e;"></div>
+        <div id="cpDesc" style="font-size:11px;color:#666;margin-top:2px;"></div>
+        <div id="cpDist" style="font-size:11px;color:#0057b8;margin-top:2px;"></div>
       </div>
     </div>
     
-    <div style="position:fixed;bottom:30px;right:30px;z-index:1000;
-        background:white;padding:14px 18px;border-radius:12px;
+    <div style="position:fixed;bottom:25px;right:20px;z-index:1000;
+        background:white;padding:15px 18px;border-radius:14px;
         border-left:5px solid #28a745;
-        box-shadow:0 4px 15px rgba(0,0,0,0.18);
+        box-shadow:0 4px 20px rgba(0,0,0,0.18);
         font-family:Arial,sans-serif;font-size:13px;min-width:200px;">
-      <div style="font-size:15px;font-weight:bold;margin-bottom:10px;">
+      <div style="font-size:15px;font-weight:bold;margin-bottom:10px;color:#1a1a2e;">
         🎬 Ship Animation
       </div>
-      <button onclick="startAnimation()" id="startBtn"
-        style="background:#28a745;color:white;border:none;
-               padding:7px 16px;border-radius:8px;cursor:pointer;
-               font-size:13px;margin-right:6px;font-weight:bold;">
-        ▶ Start
-      </button>
-      <button onclick="resetAnimation()" id="resetBtn"
-        style="background:#6c757d;color:white;border:none;
-               padding:7px 16px;border-radius:8px;cursor:pointer;
-               font-size:13px;font-weight:bold;">
-        ↺ Reset
-      </button>
-      <div style="margin-top:10px;">
-        Speed:
-        <select id="speedSelect"
-          style="padding:3px 6px;border-radius:5px;border:1px solid #ccc;">
-          <option value="1200">Slow</option>
-          <option value="500" selected>Normal</option>
-          <option value="200">Fast</option>
-          <option value="80">Very Fast</option>
+      <div style="margin-bottom:10px;display:flex;gap:8px;">
+        <button onclick="startAnim()" id="startBtn"
+          style="background:#28a745;color:white;border:none;
+                 padding:8px 16px;border-radius:8px;cursor:pointer;
+                 font-size:13px;font-weight:bold;flex:1;">▶ Start</button>
+        <button onclick="resetAnim()"
+          style="background:#6c757d;color:white;border:none;
+                 padding:8px 14px;border-radius:8px;cursor:pointer;
+                 font-size:13px;font-weight:bold;">↺</button>
+      </div>
+      <div style="margin-bottom:10px;font-size:12px;color:#555;">
+        Speed:&nbsp;
+        <select id="spd" style="padding:4px 8px;border-radius:6px;
+                border:1px solid #ccc;font-size:12px;">
+          <option value="1200">🐢 Slow</option>
+          <option value="600" selected>🚢 Normal</option>
+          <option value="250">💨 Fast</option>
+          <option value="80">⚡ Very Fast</option>
         </select>
       </div>
-      <div id="progressText"
-        style="margin-top:8px;color:#555;font-size:12px;">
-        Ready to sail...
-      </div>
-      <div id="nearbyInfo"
-        style="margin-top:6px;color:#0057b8;font-size:12px;
-               font-weight:bold;min-height:16px;">
+      <div id="prog" style="color:#666;font-size:12px;min-height:16px;">
+        Press ▶ Start to begin sailing
       </div>
     </div>
     
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
+<script>
+(function() {
 
-        var waypoints    = [[21.0000,89.0000],[17.0000,85.0000],[13.0000,81.0000],[9.0000,81.0000],[5.0000,81.0000]];
-        var nearbyPlaces = [{wpIdx:0,lat:22.3,lon:91.8,name:'Chittagong',type:'🏙️ Port',desc:'Largest port in Bangladesh',dist:323},{wpIdx:2,lat:13.0,lon:80.2,name:'Chennai',type:'🏙️ Port',desc:'Major Indian port on Coromandel Coast',dist:87},{wpIdx:3,lat:9.7,lon:80.0,name:'Jaffna',type:'🏛️ City',desc:'Northern Sri Lanka — historic city',dist:135},{wpIdx:3,lat:7.9,lon:81.0,name:'Trincomalee',type:'⚓ Port',desc:'Natural deep-water harbour',dist:122}];
-        var totalPoints  = waypoints.length;
-        var currentIdx   = 0;
-        var animTimer    = null;
-        var shipMarker   = null;
-        var trailLine    = null;
-        var trailPoints  = [];
-        var popupMarkers = [];
-        var shownPlaces  = {};
+  var WPS = [[25.0000,57.0000],[21.0000,61.0000],[17.0000,65.0000],[13.0000,69.0000],[9.0000,73.0000],[5.0000,77.0000],[1.0000,81.0000],[-3.0000,85.0000],[-7.0000,89.0000],[-11.0000,93.0000],[-15.0000,97.0000],[-19.0000,101.0000],[-23.0000,105.0000],[-27.0000,109.0000],[-31.0000,113.0000],[-31.0000,117.0000]];
+  var LMS = [{i:0,n:'Abu Dhabi',e:'🌆',t:'City',d:'Capital of the UAE',km:268,ji:1},{i:0,n:'Muscat',e:'🏙️',t:'Port',d:'Capital of Oman',km:225,ji:2},{i:1,n:'Arabian Sea',e:'🌊',t:'Sea',d:'Monsoon weather zone',km:236,ji:3},{i:2,n:'Gulf of Aden',e:'🌊',t:'Gulf',d:'Connects Red Sea to Arabian Sea',km:579,ji:4},{i:3,n:'Goa',e:'🏖️',t:'City',d:'Famous Indian coastal city',km:587,ji:5},{i:4,n:'Kochi',e:'⚓',t:'Port',d:'Historic spice trade port, Kerala',km:376,ji:6},{i:4,n:'Chagos Archipelago',e:'🏝️',t:'Island',d:'British Indian Ocean Territory',km:458,ji:7},{i:5,n:'Thiruvananthapuram',e:'🏙️',t:'City',d:'Southernmost major Indian city',km:389,ji:8},{i:5,n:'Colombo',e:'🏙️',t:'Port',d:'Capital and main port of Sri Lanka',km:375,ji:9},{i:5,n:'Trincomalee',e:'⚓',t:'Port',d:'Natural deep-water harbour, Sri Lanka',km:547,ji:10}];
+  var N   = WPS.length;
+  var idx = 0, timer = null;
+  var ship = null, trail = null, pts = [];
+  var shown = {};
 
-        // ── Ship emoji icon ──
-        var shipIcon = L.divIcon({
-            html: '<div style="font-size:30px;line-height:1;'
-                + 'filter:drop-shadow(2px 2px 4px rgba(0,0,0,0.6));'
-                + 'transform:translate(-50%,-50%);">🚢</div>',
-            iconSize:   [38,38],
-            iconAnchor: [19,19],
-            className:  ''
-        });
+  // Ship emoji icon
+  var shipIcon = L.divIcon({
+    html: '<div style="font-size:26px;line-height:1;'
+        + 'transform:translate(-50%,-50%);">🚢</div>',
+    iconSize:[34,34], iconAnchor:[17,17], className:''
+  });
 
-        // ── Find Leaflet map ──
-        function getMap() {
-            for (var key in window) {
-                try {
-                    if (window[key] && window[key]._leaflet_id !== undefined
-                        && typeof window[key].addLayer === 'function') {
-                        return window[key];
-                    }
-                } catch(e) {}
-            }
-            return null;
-        }
+  // Find the Leaflet map instance
+  function getMap() {
+    for (var k in window) {
+      try {
+        var o = window[k];
+        if (o && o._leaflet_id !== undefined
+            && typeof o.addLayer === 'function') return o;
+      } catch(e) {}
+    }
+    return null;
+  }
 
-        // ── Show a place popup that fades out ──
-        function showPlacePopup(map, place) {
-            var icon = L.divIcon({
-                html: '<div style="'
-                    + 'background:white;'
-                    + 'border:2px solid #ff8c00;'
-                    + 'border-radius:10px;'
-                    + 'padding:6px 10px;'
-                    + 'font-family:Arial,sans-serif;'
-                    + 'font-size:12px;'
-                    + 'font-weight:bold;'
-                    + 'box-shadow:0 3px 10px rgba(0,0,0,0.25);'
-                    + 'white-space:nowrap;'
-                    + 'min-width:140px;'
-                    + 'text-align:center;'
-                    + '">'
-                    + place.type + ' ' + place.name
-                    + '<br><span style="font-weight:normal;color:#555;font-size:11px;">'
-                    + place.desc
-                    + '</span>'
-                    + '<br><span style="color:#0057b8;font-size:10px;">~'
-                    + place.dist + ' km from route</span>'
-                    + '</div>',
-                iconSize:   [160, 70],
-                iconAnchor: [80, 35],
-                className:  ''
-            });
+  // Highlight a place in the left panel list
+  function highlightPlace(lm) {
+    if (shown[lm.n]) return;
+    shown[lm.n] = true;
 
-            var marker = L.marker([place.lat, place.lon], {icon:icon}).addTo(map);
-            popupMarkers.push(marker);
+    // Light up the list item
+    var el = document.getElementById('ji_' + lm.ji);
+    if (el) {
+      el.style.background      = '#fff3cd';
+      el.style.borderLeftColor = '#ff8c00';
+      el.style.opacity         = '1';
+      el.style.boxShadow       = '0 2px 8px rgba(255,140,0,0.2)';
+      el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
 
-            // Update side panel
-            document.getElementById('nearbyInfo').innerHTML =
-                '📍 Passing near: <b>' + place.name + '</b>';
+    // Update bottom footer of left panel
+    document.getElementById('cpLine').textContent = lm.e + '  ' + lm.n;
+    document.getElementById('cpDesc').textContent = lm.d;
+    document.getElementById('cpDist').textContent = '~' + lm.km + ' km from route';
+    document.getElementById('currentPlace').style.display = 'block';
+  }
 
-            // Auto-remove popup after 3 seconds
-            setTimeout(function() {
-                try { map.removeLayer(marker); } catch(e) {}
-            }, 3000);
-        }
-
-        // ── Start animation ──
-        window.startAnimation = function() {
-            var map = getMap();
-            if (!map) {
-                alert('Map not ready — please wait a second and try again.');
-                return;
-            }
-
-            // Clear previous
-            if (animTimer) { clearInterval(animTimer); }
-            popupMarkers.forEach(function(mk) {
-                try { map.removeLayer(mk); } catch(e) {}
-            });
-            popupMarkers = [];
-            trailPoints  = [];
-            shownPlaces  = {};
-            if (trailLine)   { map.removeLayer(trailLine);   trailLine  = null; }
-            if (shipMarker)  { map.removeLayer(shipMarker);  shipMarker = null; }
-
-            currentIdx = 0;
-
-            document.getElementById('startBtn').disabled = true;
-            document.getElementById('startBtn').style.background = '#6c757d';
-            document.getElementById('nearbyInfo').innerHTML = '';
-
-            // Place ship at start
-            shipMarker  = L.marker(waypoints[0], {icon:shipIcon}).addTo(map);
-            trailPoints = [waypoints[0]];
-            trailLine   = L.polyline(trailPoints, {
-                color:'#ff6600', weight:3, opacity:0.85, dashArray:'6,4'
-            }).addTo(map);
-
-            var speed = parseInt(document.getElementById('speedSelect').value);
-
-            animTimer = setInterval(function() {
-                currentIdx++;
-                if (currentIdx >= totalPoints) {
-                    clearInterval(animTimer);
-                    animTimer = null;
-                    document.getElementById('progressText').innerHTML =
-                        '✅ Arrived at ' + 'Colombo' + '!';
-                    document.getElementById('nearbyInfo').innerHTML =
-                        '🏁 Journey complete!';
-                    document.getElementById('startBtn').disabled  = false;
-                    document.getElementById('startBtn').style.background = '#28a745';
-                    return;
-                }
-
-                var pos = waypoints[currentIdx];
-
-                // Move ship
-                shipMarker.setLatLng(pos);
-
-                // Extend trail
-                trailPoints.push(pos);
-                trailLine.setLatLngs(trailPoints);
-
-                // Smooth pan
-                map.panTo(pos, {animate:true, duration:0.4});
-
-                // Progress %
-                var pct = Math.round((currentIdx / (totalPoints-1)) * 100);
-                document.getElementById('progressText').innerHTML =
-                    '⛵ Sailing... ' + pct + '%';
-
-                // ── Check for nearby places ──
-                nearbyPlaces.forEach(function(place) {
-                    if (shownPlaces[place.name]) return;
-                    if (place.wpIdx === currentIdx ||
-                        Math.abs(place.wpIdx - currentIdx) <= 1) {
-                        shownPlaces[place.name] = true;
-                        showPlacePopup(map, place);
-                    }
-                });
-
-            }, speed);
-        };
-
-        // ── Reset animation ──
-        window.resetAnimation = function() {
-            var map = getMap();
-            if (!map) return;
-
-            if (animTimer) { clearInterval(animTimer); animTimer = null; }
-            popupMarkers.forEach(function(mk) {
-                try { map.removeLayer(mk); } catch(e) {}
-            });
-            popupMarkers = [];
-            if (shipMarker) { map.removeLayer(shipMarker); shipMarker = null; }
-            if (trailLine)  { map.removeLayer(trailLine);  trailLine  = null; }
-
-            trailPoints = [];
-            shownPlaces = {};
-            currentIdx  = 0;
-
-            document.getElementById('startBtn').disabled = false;
-            document.getElementById('startBtn').style.background = '#28a745';
-            document.getElementById('progressText').innerHTML = 'Ready to sail...';
-            document.getElementById('nearbyInfo').innerHTML   = '';
-
-            map.fitBounds(L.latLngBounds(waypoints));
-        };
-
+  // Dim all items back to default
+  function resetList() {
+    LMS.forEach(function(lm) {
+      var el = document.getElementById('ji_' + lm.ji);
+      if (el) {
+        el.style.background      = '#f8f9fa';
+        el.style.borderLeftColor = '#dee2e6';
+        el.style.opacity         = '0.45';
+        el.style.boxShadow       = 'none';
+      }
     });
-    </script>
+    document.getElementById('currentPlace').style.display = 'none';
+  }
+
+  window.startAnim = function() {
+    var map = getMap();
+    if (!map) { alert('Map is still loading — wait a moment.'); return; }
+
+    // Clear any previous animation
+    if (timer) clearInterval(timer);
+    if (ship)  try{ map.removeLayer(ship);  }catch(e){}
+    if (trail) try{ map.removeLayer(trail); }catch(e){}
+
+    idx = 0; pts = []; shown = {};
+    resetList();
+
+    var btn = document.getElementById('startBtn');
+    btn.disabled = true;
+    btn.style.background = '#adb5bd';
+    document.getElementById('prog').textContent = 'Setting sail from Dubai...';
+
+    // Place ship at start
+    ship  = L.marker(WPS[0], {icon: shipIcon}).addTo(map);
+    pts   = [WPS[0]];
+    trail = L.polyline(pts, {
+      color: '#ff6600', weight: 3,
+      opacity: 0.9, dashArray: '8,5'
+    }).addTo(map);
+
+    var spd = parseInt(document.getElementById('spd').value);
+
+    timer = setInterval(function() {
+      idx++;
+
+      if (idx >= N) {
+        clearInterval(timer);
+        timer = null;
+        document.getElementById('prog').textContent = '✅ Arrived at Perth!';
+        btn.disabled = false;
+        btn.style.background = '#28a745';
+        // Mark all remaining unvisited items as complete
+        LMS.forEach(function(lm) {
+          var el = document.getElementById('ji_' + lm.ji);
+          if (el && el.style.opacity !== '1') el.style.opacity = '1';
+        });
+        return;
+      }
+
+      // Move ship and trail
+      var pos = WPS[idx];
+      ship.setLatLng(pos);
+      pts.push(pos);
+      trail.setLatLngs(pts);
+      map.panTo(pos, {animate: true, duration: 0.35});
+
+      // Update progress
+      var pct = Math.round(idx / (N - 1) * 100);
+      document.getElementById('prog').textContent =
+        '⛵ Sailing... ' + pct + '% (' + idx + '/' + (N-1) + ')';
+
+      // Check if any landmark is at or near this waypoint
+      LMS.forEach(function(lm) {
+        if (Math.abs(lm.i - idx) <= 1) highlightPlace(lm);
+      });
+
+    }, spd);
+  };
+
+  window.resetAnim = function() {
+    var map = getMap();
+    if (!map) return;
+    if (timer) clearInterval(timer);
+    if (ship)  try{ map.removeLayer(ship);  }catch(e){}
+    if (trail) try{ map.removeLayer(trail); }catch(e){}
+    timer = ship = trail = null;
+    idx = 0; pts = []; shown = {};
+    resetList();
+    var btn = document.getElementById('startBtn');
+    btn.disabled = false;
+    btn.style.background = '#28a745';
+    document.getElementById('prog').textContent = 'Press ▶ Start to begin sailing';
+    map.fitBounds(L.latLngBounds(WPS));
+  };
+
+})();
+</script>
     
-            <div class="folium-map" id="map_fe4d851327c077bb1c957f2ba2435475" ></div>
+            <div class="folium-map" id="map_7a45b6445579add7a9e5230c5c754d74" ></div>
         
 </body>
 <script>
     
     
-            var map_fe4d851327c077bb1c957f2ba2435475 = L.map(
-                "map_fe4d851327c077bb1c957f2ba2435475",
+            var map_7a45b6445579add7a9e5230c5c754d74 = L.map(
+                "map_7a45b6445579add7a9e5230c5c754d74",
                 {
                     center: [10.0, 75.0],
                     crs: L.CRS.EPSG3857,
@@ -320,7 +422,7 @@
 
         
     
-            var tile_layer_91e63d678ee3868e28d6292e38a55910 = L.tileLayer(
+            var tile_layer_728d1533be6112c5baefa9247895846f = L.tileLayer(
                 "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
                 {
   "minZoom": 0,
@@ -337,16 +439,16 @@
             );
         
     
-            tile_layer_91e63d678ee3868e28d6292e38a55910.addTo(map_fe4d851327c077bb1c957f2ba2435475);
+            tile_layer_728d1533be6112c5baefa9247895846f.addTo(map_7a45b6445579add7a9e5230c5c754d74);
         
     
-            var poly_line_610d581abdf05cc08e7170c565063796 = L.polyline(
-                [[21.0, 89.0], [17.0, 85.0], [13.0, 81.0], [9.0, 81.0], [5.0, 81.0]],
+            var poly_line_fd37c59b598bb0f10a18ed0363af3c45 = L.polyline(
+                [[25.0, 57.0], [21.0, 61.0], [17.0, 65.0], [13.0, 69.0], [9.0, 73.0], [5.0, 77.0], [1.0, 81.0], [-3.0, 85.0], [-7.0, 89.0], [-11.0, 93.0], [-15.0, 97.0], [-19.0, 101.0], [-23.0, 105.0], [-27.0, 109.0], [-31.0, 113.0], [-31.0, 117.0]],
                 {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#0057b8", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 4}
-            ).addTo(map_fe4d851327c077bb1c957f2ba2435475);
+            ).addTo(map_7a45b6445579add7a9e5230c5c754d74);
         
     
-            poly_line_610d581abdf05cc08e7170c565063796.bindTooltip(
+            poly_line_fd37c59b598bb0f10a18ed0363af3c45.bindTooltip(
                 `<div>
                      Optimal Route
                  </div>`,
@@ -356,37 +458,14 @@
             );
         
     
-            var circle_marker_7e997a7936da28ec84a765ebda0637b0 = L.circleMarker(
-                [9.0, 81.0],
-                {"bubblingMouseEvents": true, "color": "#0057b8", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "white", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
-            ).addTo(map_fe4d851327c077bb1c957f2ba2435475);
-        
-    
-        var popup_df953f98d70f5a81f65114da2b0e5a90 = L.popup({
-  "maxWidth": "100%",
-});
-
-        
-            
-                var html_a882c010908a74bb6ae662987a61b85e = $(`<div id="html_a882c010908a74bb6ae662987a61b85e" style="width: 100.0%; height: 100.0%;">Waypoint 3</div>`)[0];
-                popup_df953f98d70f5a81f65114da2b0e5a90.setContent(html_a882c010908a74bb6ae662987a61b85e);
-            
-        
-
-        circle_marker_7e997a7936da28ec84a765ebda0637b0.bindPopup(popup_df953f98d70f5a81f65114da2b0e5a90)
-        ;
-
-        
-    
-    
-            var marker_4bbb895252fca488edf5968a88e23caa = L.marker(
-                [21.0, 89.0],
+            var marker_6c0ae9b8efdbc0c3a3a0e92d45bb758d = L.marker(
+                [25.0, 57.0],
                 {
 }
-            ).addTo(map_fe4d851327c077bb1c957f2ba2435475);
+            ).addTo(map_7a45b6445579add7a9e5230c5c754d74);
         
     
-            var icon_bc5da70edd664b2e66fb0a855a272f2a = L.AwesomeMarkers.icon(
+            var icon_32cae96bc0d8d3304cb0463438e33636 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "green",
   "iconColor": "white",
@@ -397,26 +476,26 @@
             );
         
     
-        var popup_73f86850bdd5cbceb7c399148ac402ef = L.popup({
+        var popup_8fea4084310cfd03017fa31b0738b3c2 = L.popup({
   "maxWidth": 180,
 });
 
         
             
-                var html_42466cac4e0fea7956c0868652b1e997 = $(`<div id="html_42466cac4e0fea7956c0868652b1e997" style="width: 100.0%; height: 100.0%;"><b>🚢 Kolkata</b><br>Departure port</div>`)[0];
-                popup_73f86850bdd5cbceb7c399148ac402ef.setContent(html_42466cac4e0fea7956c0868652b1e997);
+                var html_11bc140f891070551fe28e9f4470e153 = $(`<div id="html_11bc140f891070551fe28e9f4470e153" style="width: 100.0%; height: 100.0%;"><b>🚢 Dubai</b><br>Departure port</div>`)[0];
+                popup_8fea4084310cfd03017fa31b0738b3c2.setContent(html_11bc140f891070551fe28e9f4470e153);
             
         
 
-        marker_4bbb895252fca488edf5968a88e23caa.bindPopup(popup_73f86850bdd5cbceb7c399148ac402ef)
+        marker_6c0ae9b8efdbc0c3a3a0e92d45bb758d.bindPopup(popup_8fea4084310cfd03017fa31b0738b3c2)
         ;
 
         
     
     
-            marker_4bbb895252fca488edf5968a88e23caa.bindTooltip(
+            marker_6c0ae9b8efdbc0c3a3a0e92d45bb758d.bindTooltip(
                 `<div>
-                     START: Kolkata
+                     START: Dubai
                  </div>`,
                 {
   "sticky": true,
@@ -424,17 +503,17 @@
             );
         
     
-                marker_4bbb895252fca488edf5968a88e23caa.setIcon(icon_bc5da70edd664b2e66fb0a855a272f2a);
+                marker_6c0ae9b8efdbc0c3a3a0e92d45bb758d.setIcon(icon_32cae96bc0d8d3304cb0463438e33636);
             
     
-            var marker_8a2b87ce659a85828bfcd26a4e0cc222 = L.marker(
-                [5.0, 81.0],
+            var marker_f9fc730f40acba2ccf927c49009dd254 = L.marker(
+                [-31.0, 117.0],
                 {
 }
-            ).addTo(map_fe4d851327c077bb1c957f2ba2435475);
+            ).addTo(map_7a45b6445579add7a9e5230c5c754d74);
         
     
-            var icon_645e5bd8c7b0c717ed042d3b1ca6dca0 = L.AwesomeMarkers.icon(
+            var icon_8cfb8ab9230e76e515d50c84fe72fb64 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "red",
   "iconColor": "white",
@@ -445,26 +524,26 @@
             );
         
     
-        var popup_e8cd34e80bb29fc5181911fd38480686 = L.popup({
+        var popup_bed9530372212d538fb5543a14a9ba2a = L.popup({
   "maxWidth": 180,
 });
 
         
             
-                var html_00a056eb29f169f5b8b705ad08b92f50 = $(`<div id="html_00a056eb29f169f5b8b705ad08b92f50" style="width: 100.0%; height: 100.0%;"><b>🏁 Colombo</b><br>ETA: <b>88.3 hrs</b><br>Risk: <b>0.8/10</b></div>`)[0];
-                popup_e8cd34e80bb29fc5181911fd38480686.setContent(html_00a056eb29f169f5b8b705ad08b92f50);
+                var html_840b9a76c9e8afa4b1f2dcad4c51fb18 = $(`<div id="html_840b9a76c9e8afa4b1f2dcad4c51fb18" style="width: 100.0%; height: 100.0%;"><b>🏁 Perth</b><br>ETA: 282.6 hrs</div>`)[0];
+                popup_bed9530372212d538fb5543a14a9ba2a.setContent(html_840b9a76c9e8afa4b1f2dcad4c51fb18);
             
         
 
-        marker_8a2b87ce659a85828bfcd26a4e0cc222.bindPopup(popup_e8cd34e80bb29fc5181911fd38480686)
+        marker_f9fc730f40acba2ccf927c49009dd254.bindPopup(popup_bed9530372212d538fb5543a14a9ba2a)
         ;
 
         
     
     
-            marker_8a2b87ce659a85828bfcd26a4e0cc222.bindTooltip(
+            marker_f9fc730f40acba2ccf927c49009dd254.bindTooltip(
                 `<div>
-                     END: Colombo
+                     END: Perth
                  </div>`,
                 {
   "sticky": true,
@@ -472,199 +551,7 @@
             );
         
     
-                marker_8a2b87ce659a85828bfcd26a4e0cc222.setIcon(icon_645e5bd8c7b0c717ed042d3b1ca6dca0);
-            
-    
-            var marker_703b4de380ab953a338c8b144ac0e5f6 = L.marker(
-                [22.3, 91.8],
-                {
-}
-            ).addTo(map_fe4d851327c077bb1c957f2ba2435475);
-        
-    
-            var icon_4c69574e466ec70ebc928f113ab57f93 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "orange",
-  "iconColor": "white",
-  "icon": "anchor",
-  "prefix": "glyphicon",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-        var popup_77476ccc2d067c78c6e059b83482e2d2 = L.popup({
-  "maxWidth": 220,
-});
-
-        
-            
-                var html_8982bc0109c548eb60bd7843959ffbb5 = $(`<div id="html_8982bc0109c548eb60bd7843959ffbb5" style="width: 100.0%; height: 100.0%;"><b>🏙️ Port Chittagong</b><br><span style='color:#555;font-size:12px;'>Largest port in Bangladesh</span><br><span style='color:#0057b8;font-size:11px;'>~323 km from route</span></div>`)[0];
-                popup_77476ccc2d067c78c6e059b83482e2d2.setContent(html_8982bc0109c548eb60bd7843959ffbb5);
-            
-        
-
-        marker_703b4de380ab953a338c8b144ac0e5f6.bindPopup(popup_77476ccc2d067c78c6e059b83482e2d2)
-        ;
-
-        
-    
-    
-            marker_703b4de380ab953a338c8b144ac0e5f6.bindTooltip(
-                `<div>
-                     🏙️ Port Chittagong
-                 </div>`,
-                {
-  "sticky": true,
-}
-            );
-        
-    
-                marker_703b4de380ab953a338c8b144ac0e5f6.setIcon(icon_4c69574e466ec70ebc928f113ab57f93);
-            
-    
-            var marker_49d642c01eb1d790f41c6777fe3d3a2c = L.marker(
-                [13.0, 80.2],
-                {
-}
-            ).addTo(map_fe4d851327c077bb1c957f2ba2435475);
-        
-    
-            var icon_1507fb3d32300e4d80b2f74c0f36358e = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "orange",
-  "iconColor": "white",
-  "icon": "anchor",
-  "prefix": "glyphicon",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-        var popup_fe3b145c58124a6784d7f0fd76971f3b = L.popup({
-  "maxWidth": 220,
-});
-
-        
-            
-                var html_11fee462eda56b490bfd2313848dfd1c = $(`<div id="html_11fee462eda56b490bfd2313848dfd1c" style="width: 100.0%; height: 100.0%;"><b>🏙️ Port Chennai</b><br><span style='color:#555;font-size:12px;'>Major Indian port on Coromandel Coast</span><br><span style='color:#0057b8;font-size:11px;'>~87 km from route</span></div>`)[0];
-                popup_fe3b145c58124a6784d7f0fd76971f3b.setContent(html_11fee462eda56b490bfd2313848dfd1c);
-            
-        
-
-        marker_49d642c01eb1d790f41c6777fe3d3a2c.bindPopup(popup_fe3b145c58124a6784d7f0fd76971f3b)
-        ;
-
-        
-    
-    
-            marker_49d642c01eb1d790f41c6777fe3d3a2c.bindTooltip(
-                `<div>
-                     🏙️ Port Chennai
-                 </div>`,
-                {
-  "sticky": true,
-}
-            );
-        
-    
-                marker_49d642c01eb1d790f41c6777fe3d3a2c.setIcon(icon_1507fb3d32300e4d80b2f74c0f36358e);
-            
-    
-            var marker_3ae7c014b711bf3b1b01d9e5ce0c4338 = L.marker(
-                [9.7, 80.0],
-                {
-}
-            ).addTo(map_fe4d851327c077bb1c957f2ba2435475);
-        
-    
-            var icon_97262030e2161ba855157c2550a97e55 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "purple",
-  "iconColor": "white",
-  "icon": "info-sign",
-  "prefix": "glyphicon",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-        var popup_4f78efb6cef6e95ca645c996284ad00b = L.popup({
-  "maxWidth": 220,
-});
-
-        
-            
-                var html_4ef00fb244ea1d0a0dca42d2bae1e9cd = $(`<div id="html_4ef00fb244ea1d0a0dca42d2bae1e9cd" style="width: 100.0%; height: 100.0%;"><b>🏛️ City Jaffna</b><br><span style='color:#555;font-size:12px;'>Northern Sri Lanka — historic city</span><br><span style='color:#0057b8;font-size:11px;'>~135 km from route</span></div>`)[0];
-                popup_4f78efb6cef6e95ca645c996284ad00b.setContent(html_4ef00fb244ea1d0a0dca42d2bae1e9cd);
-            
-        
-
-        marker_3ae7c014b711bf3b1b01d9e5ce0c4338.bindPopup(popup_4f78efb6cef6e95ca645c996284ad00b)
-        ;
-
-        
-    
-    
-            marker_3ae7c014b711bf3b1b01d9e5ce0c4338.bindTooltip(
-                `<div>
-                     🏛️ City Jaffna
-                 </div>`,
-                {
-  "sticky": true,
-}
-            );
-        
-    
-                marker_3ae7c014b711bf3b1b01d9e5ce0c4338.setIcon(icon_97262030e2161ba855157c2550a97e55);
-            
-    
-            var marker_a8fb324a89e125996f3438272e198c24 = L.marker(
-                [7.9, 81.0],
-                {
-}
-            ).addTo(map_fe4d851327c077bb1c957f2ba2435475);
-        
-    
-            var icon_2c5c9a8056a80dbda75d5ad02380bbd9 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "orange",
-  "iconColor": "white",
-  "icon": "anchor",
-  "prefix": "glyphicon",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-        var popup_54a3a73f3c7f89932b622600cc669ea7 = L.popup({
-  "maxWidth": 220,
-});
-
-        
-            
-                var html_199b7cdd667f6d15e7bb9f1c2be0d10d = $(`<div id="html_199b7cdd667f6d15e7bb9f1c2be0d10d" style="width: 100.0%; height: 100.0%;"><b>⚓ Port Trincomalee</b><br><span style='color:#555;font-size:12px;'>Natural deep-water harbour</span><br><span style='color:#0057b8;font-size:11px;'>~122 km from route</span></div>`)[0];
-                popup_54a3a73f3c7f89932b622600cc669ea7.setContent(html_199b7cdd667f6d15e7bb9f1c2be0d10d);
-            
-        
-
-        marker_a8fb324a89e125996f3438272e198c24.bindPopup(popup_54a3a73f3c7f89932b622600cc669ea7)
-        ;
-
-        
-    
-    
-            marker_a8fb324a89e125996f3438272e198c24.bindTooltip(
-                `<div>
-                     ⚓ Port Trincomalee
-                 </div>`,
-                {
-  "sticky": true,
-}
-            );
-        
-    
-                marker_a8fb324a89e125996f3438272e198c24.setIcon(icon_2c5c9a8056a80dbda75d5ad02380bbd9);
+                marker_f9fc730f40acba2ccf927c49009dd254.setIcon(icon_8cfb8ab9230e76e515d50c84fe72fb64);
             
 </script>
 </html>
